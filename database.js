@@ -39,3 +39,28 @@ export async function createLivro(isbn, titulo, descricao, data, estado, loc, ur
     `, [isbn, titulo, descricao, data, estado, loc, uri])
     return result
 }
+
+
+export async function getMateriais() {
+    const [result] = await pool.query("SELECT * FROM Materiais_Ditaticos")
+    return result
+}
+
+export async function getMaterial(id) {
+    const [result] = await pool.query("SELECT * FROM Materiais_Ditaticos WHERE id = ?", [id])
+    return result
+}
+
+export async function createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material) {
+    const result = await pool.query(`
+    INSERT INTO Livros (id,
+                        descricao,
+                        numero_de_serie,
+                        data_de_aquisicao,
+                        estado_de_conservacao,
+                        localizacao_fisica,
+                        uri_da_foto_do_material)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material])
+    return result
+}

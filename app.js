@@ -32,6 +32,26 @@ app.post("/livro", async (req, res) => {
     res.status(201).send(livro)
 })
 
+// GET Livros. Através de uma requisição GET, retorna todos os Livros da base de dados
+app.get("/materiais", async (req, res) => {
+    const materiais = await getMateriais();
+    res.status(200).send(materiais)
+})
+
+// GET Livros com base no isbn. Através de uma requisição GET, retorna o Livro da base de dados com o isbn correspondente
+app.get("/material/:id", async (req, res) => {
+    const id = req.params.id
+    const material = await getMaterial(id);
+    res.status(200).send(material)
+})
+
+// POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
+app.post("/material", async (req, res) => {
+    const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
+    const material = await createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
+    res.status(201).send(material)
+})
+
 // Abre o servidor local na porta 3333
 const port = 3333
 app.listen(port, () => {
