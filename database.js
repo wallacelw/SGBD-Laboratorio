@@ -6,6 +6,7 @@ import mysql from "mysql2"
     na camada de backend, no app.js. 
 */
 
+// Cria a conexão com a base de dados local (ip 127.0.0.1)
 const pool = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
@@ -13,6 +14,8 @@ const pool = mysql.createPool({
     database: 'projeto_db'
 }).promise()
 
+
+// Função que faz a query para buscar todos os Livros do DB
 export async function getLivros() {
     const [result] = await pool.query("SELECT * FROM Livros")
     return result
