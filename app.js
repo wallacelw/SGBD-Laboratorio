@@ -90,7 +90,7 @@ app.get("/materiais", async (req, res) => {
 // GET Materiais com base no id. Através de uma requisição GET, retorna o Material da base de dados com o id correspondente
 app.get("/material/byId/:id", async (req, res) => {
     const id = req.params.id
-    const material = await db.getBuscaMateriais(id);
+    const material = await db.getBuscaMateriais("id", id);
     res.status(200).send(material)
 })
 
@@ -156,6 +156,12 @@ app.post("/emprestimo", async (req, res) => {
     const {id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo} = req.body
     const emprestimos = await db.createEmprestimo(id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo)
     res.status(201).send(emprestimos)
+})
+
+app.post("/emprestimo/updateStatus", async (req, res) => {
+    const {id, status, type} = req.body
+    const emprestimo = await db.updateEmprestimoStatus(id, status, type)
+    res.status(201).send(emprestimo)
 })
 
 app.post("/register", isAuthorized, async (req, res) => {

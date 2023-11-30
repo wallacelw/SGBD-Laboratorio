@@ -138,6 +138,22 @@ export async function atualizaEmprestimo(id_do_livro, date) {
     return result
 }
 
+export async function updateEmprestimoStatus(id, status, type) {
+    let id_type
+    switch (type) {
+        case "material":
+            id_type = "id_do_material"
+            break
+        case "livro":
+            id_type = "id_do_livro"
+            break
+        default:
+            return "Not a valid id type"
+    }
+    const [result] = await pool.query(`UPDATE Emprestimos SET status_do_emprestimo = "${status}" WHERE ${id_type} = "${id}"` )
+    return result
+}
+
 export async function getEmprestimoByParameter(parameter, value) {
     const [result] = await pool.query(`SELECT * FROM Emprestimos WHERE ${parameter} = ?`, [value])
     return result
