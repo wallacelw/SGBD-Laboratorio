@@ -23,32 +23,45 @@ app.get("/livros", async (req, res) => {
 })
 
 // GET Livros com base no isbn. Através de uma requisição GET, retorna o Livro da base de dados com o isbn correspondente
-app.get("/livro/:isbn", async (req, res) => {
+app.get("/livro/byIsbn/:isbn", async (req, res) => {
     const isbn = req.params.isbn
     const livro = await db.getBuscalivro("isbn", isbn);
     res.status(200).send(livro)
 })
 
-// GET isbn com base no autor. Através de uma requisição GET, retorna o isbn da base de dados com o autor correspondente
-app.get("/autor/:autor", async (req, res) => {
-    const autor = req.params.autor
-    const livro = await db.getAutorlivro(autor);
-    res.status(200).send(livro)
-})
-
 // GET Livros com base no titulo. Através de uma requisição GET, retorna o Livro da base de dados com o titulo correspondente
-app.get("/livro/:titulo", async (req, res) => {
+app.get("/livro/byTitle/:titulo", async (req, res) => {
     const titulo = req.params.titulo
     const livro = await db.getBuscalivro("titulo", titulo);
     res.status(200).send(livro)
 })
 
+app.get("/livro/byCategory/:categoria", async (req, res) => {
+    const category = req.params.categoria
+    const result = await db.getLivroByCategoria(category)
+    res.status(200).send(result)
+})
+
+app.get("/livro/byAuthor/:autor", async (req, res) => {
+    const category = req.params.autor
+    const result = await db.getLivroByAutor(autor)
+    res.status(200).send(result)
+})
+
+// GET isbn com base no autor. Através de uma requisição GET, retorna o isbn da base de dados com o autor correspondente
+app.get("/autor/:autor", async (req, res) => {
+    const autor = req.params.autor
+    const livro = await db.getAutor(autor);
+    res.status(200).send(livro)
+})
+
 // GET isbn com base no categoria. Através de uma requisição GET, retorna o isbn da base de dados com o categoria correspondente
-app.get("/categoria_dos_livros/:categoria", async (req, res) => {
+app.get("/categoria/:categoria", async (req, res) => {
     const categoria = req.params.categoria
     const livro = await db.getCategorialivro(categoria);
     res.status(200).send(livro)
 })
+
 
 // POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
 app.post("/livro", async (req, res) => {
@@ -68,28 +81,28 @@ app.get("/materiais", async (req, res) => {
 })
 
 // GET Materiais com base no id. Através de uma requisição GET, retorna o Material da base de dados com o id correspondente
-app.get("/material/:id", async (req, res) => {
+app.get("/material/byId/:id", async (req, res) => {
     const id = req.params.id
-    const material = await db.getMaterial(id);
+    const material = await db.getBuscaMateriais(id);
     res.status(200).send(material)
 })
 
 // GET Materiais com base no id. Através de uma requisição GET, retorna o Material da base de dados com o id correspondente
-app.get("/material/:descrição", async (req, res) => {
-    const descrição = req.params.descrição
-    const material = await db.getMaterial(descrição);
+app.get("/material/byDesc/:descricao", async (req, res) => {
+    const descricao = req.params.descricao
+    const material = await db.getBuscaMateriais("descricao", descricao);
     res.status(200).send(material)
 })
 
-app.get("/material/:numero_de_serie", async (req, res) => {
+app.get("/material/bySerialNumber/:numero_de_serie", async (req, res) => {
     const numero_de_serie = req.params.numero_de_serie
-    const material = await db.getMaterial(numero_de_serie);
+    const material = await db.getBuscaMateriais("numero_de_serie", numero_de_serie);
     res.status(200).send(material)
 })
 
-app.get("/material/:estado_de_conservação", async (req, res) => {
+app.get("/material/byConservation/:estado_de_conservação", async (req, res) => {
     const estado_de_conservação = req.params.estado_de_conservação
-    const material = await db.getMaterial(estado_de_conservação);
+    const material = await db.getBuscaMateriais("estado_de_conservação", estado_de_conservação);
     res.status(200).send(material)
 })
 
@@ -110,10 +123,28 @@ app.get("/emprestimos", async (req, res) => {
     res.status(200).send(emprestimos)
 })
 
+app.get("/emprestimos/byLivroIsbn/:isbn", async (req, res) => {
+    const isbn = req.params.isbn
+    const emprestimos = await db.getEmprestimoByParameter("id_do_livro", isbn);
+    res.status(200).send(emprestimos)
+})
+
+app.get("/emprestimos/byMaterialId/:id", async (req, res) => {
+    const id = req.params.id
+    const emprestimos = await db.getEmprestimoByParameter("id_do_material", id);
+    res.status(200).send(emprestimos)
+})
+
+app.get("/emprestimos/byUserId/:id", async (req, res) => {
+    const id = req.params.id
+    const emprestimos = await db.getEmprestimoByParameter("id_do_usuario", id);
+    res.status(200).send(emprestimos)
+})
+
 // POST Emprestimos. Cria um Emprestimos novo na base de dados de acordo com as informações passadas
-app.post("/livro", async (req, res) => {
+app.post("/emprestimo", async (req, res) => {
     const {id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo} = req.body
-    const emprestimos = await db.createLivro(id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo)
+    const emprestimos = await db.createEmprestimo(id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo)
     res.status(201).send(emprestimos)
 })
 
