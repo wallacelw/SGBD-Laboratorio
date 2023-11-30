@@ -1,6 +1,9 @@
 import express from 'express'
 import * as db from "./database.js"
 import cors from 'cors'
+import bcrypt from 'bcryptjs'
+import cookieParser from 'cookie-parser'
+import {isAuthorized} from './app/middleware/auth.js'
 
 /*
     Aqui ficarão as funções da API, responsáveis por receber algum pedido e
@@ -11,7 +14,8 @@ import cors from 'cors'
 // Inicializa o express e habilita o cors para permitir troca de dados em um mesmo localhost com diferentes portas
 const app = express()
 app.use(cors());
-
+app.use(express.json())
+app.use(cookieParser())
 /*
     Aqui ficarão as funções para a tabela dos livros.
 */
@@ -64,7 +68,10 @@ app.get("/categoria/:categoria", async (req, res) => {
 
 
 // POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
-app.post("/livro", async (req, res) => {
+app.post("/livro", isAuthorized, async (req, res) => {
+    if (!req.user || req.user.funcao != "administrador") {
+        return res.status(401).send("Somente administradores podem criar novos livros.")
+    }
     const {isbn, titulo, descricao, data, estado, loc, uri} = req.body
     const livro = await db.createLivro(isbn, titulo, descricao, data, estado, loc, uri)
     res.status(201).send(livro)
@@ -107,7 +114,10 @@ app.get("/material/byConservation/:estado_de_conservação", async (req, res) =>
 })
 
 // POST Materiais. Cria um Materiais novo na base de dados de acordo com as informações passadas
-app.post("/material", async (req, res) => {
+app.post("/material", isAuthorized, async (req, res) => {
+    if (!req.user || req.user.funcao != "administrador") {
+        return res.status(401).send("Somente administradores podem criar novos materiais.")
+    }
     const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
     const material = await db.createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
     res.status(201).send(material)
@@ -147,6 +157,59 @@ app.post("/emprestimo", async (req, res) => {
     const emprestimos = await db.createEmprestimo(id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo)
     res.status(201).send(emprestimos)
 })
+
+app.post("/register", isAuthorized, async (req, res) => {
+    const {id,
+           nome,
+           sobrenome,
+           funcao,
+           login,
+           senha,
+           uri_da_foto_do_usuario} = req.body;
+
+    // Isso tudo deveria ser feito por um controller separado. Futura refatoração vai mexer aqui.
+    if (!req.user || req.user.funcao != "administrador") {
+        return res.status(401).send("Somente administradores podem criar novos usuários.")
+    }
+    const users = await db.getUserByLogin(login)
+    if (users.length() > 0) {
+        return res.status(409).send("Login já está em uso!")
+    }
+
+    let hashedPassword = await bcrypt.hash(senha, 8)
+    const result = db.createUser(id, nome, sobrenome, funcao, login, hashedPassword, uri_da_foto_do_usuario)
+
+    res.status(201).send(result)
+})
+
+app.post("/login", async (req, res) => {
+    const {login, senha} = req.body
+    const users = await db.getUserByLogin(login)
+    if (!users || !await bcrypt.compare(senha, users[0].senha)) {
+        res.status(401).send("Login ou senha inválidos.")
+    }
+    const id = users[0].id
+    const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
+        expiresIn: 90
+    });
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() + 90 * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    }
+    res.cookie('userSave', token, cookieOptions);
+    res.status(200)
+})
+
+app.get("/logout", (req, res) => {
+    res.cookie('userSave', 'logout', {
+        expires: new Date(Date.now() + 2 * 1000),
+        httpOnly: true
+    })
+    res.status(200)
+})
+
 
 // Abre o servidor local na porta 3333
 const port = 3333

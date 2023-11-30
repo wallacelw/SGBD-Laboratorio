@@ -152,3 +152,20 @@ export async function getEmprestimoByUser(id) {
     const [result] = await pool.query("SELECT * FROM Emprestimos WHERE id_do_usuario = ?", [id])
     return result
 }
+
+export async function getUserByLogin(login) {
+    const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
+    return result
+}
+
+export async function createUser(id, nome, sobrenome, funcao, login, senha, uri_da_foto_do_usuario) {
+    const [result] = await pool.query("INSERT INTO users SET ?", {
+    id: id,
+    nome: nome,
+    sobrenome: sobrenome,
+    funcao: funcao,
+    login: login,
+    senha: senha,
+    uri_da_foto_do_usuario: uri_da_foto_do_usuario})
+    return result
+}
