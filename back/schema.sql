@@ -48,7 +48,6 @@ create table Emprestimos(
     data_de_devolucao_prevista date,
     status_do_emprestimo enum("devolvido", "em_uso", "atrasado")
 );
-alter table Emprestimos add constraint fk_usuario foreign key (id_do_usuario) references Usuarios (id);
 
 create table Usuarios(
 	id int primary key,
@@ -64,8 +63,7 @@ alter table Emprestimos add constraint fk_usuario foreign key (id_do_usuario) re
 alter table Emprestimos add constraint fk_emprestimo_livro foreign key (id_do_livro) references Livros (isbn);
 alter table Emprestimos add constraint fk_emprestimo_material foreign key (id_do_material) references Materiais_Ditaticos (id);
 
-
-insert into Livros(
+insert into Livros (
 	isbn,
     titulo,
     descricao,
@@ -73,4 +71,8 @@ insert into Livros(
     estado_de_conservacao,
     localizacao_fisica,
     uri_da_capa_do_livro
-) values (1, 'titulo', 'descricao', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'), (2, 'titulo2', 'descricao', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd');
+) 
+values 
+(1, 'titulo', 'descricao', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'), 
+(2, 'titulo2', 'descricao', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'),
+(3, 'titulo3', 'descricao', '1000-01-01 00:00:00', 'ok', 'atras', '20321sd');
