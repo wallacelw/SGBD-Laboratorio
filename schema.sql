@@ -48,7 +48,6 @@ create table Emprestimos(
     data_de_devolucao_prevista date,
     status_do_emprestimo enum("devolvido", "em_uso", "atrasado")
 );
-alter table Emprestimos add constraint fk_usuario foreign key (id_do_usuario) references Usuarios (id);
 
 create table Usuarios(
 	id int primary key,
