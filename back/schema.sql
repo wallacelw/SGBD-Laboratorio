@@ -102,3 +102,16 @@ values
 (2, 'descrica2o', '321', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'),
 (3, 'descricao3', '213', '1000-01-01 00:00:00', 'ok', 'atras', '20321sd')
 ;
+
+insert into Usuarios (
+	id,
+	nome,
+    sobrenome,
+    funcao,
+    login,
+    senha,
+    uri_da_foto_do_usuario
+)
+values 
+(1, 'root', 'adm', 'administrador', 'admin', 'admin', 'secret')
+;

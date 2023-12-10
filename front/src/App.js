@@ -6,18 +6,27 @@ import AddMaterial from "./pages/AddMaterial";
 import AddBook from "./pages/AddBook";
 import EditBook from "./pages/EditBook";
 import EditMaterial from "./pages/EditMaterial";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Users from "./pages/Users";
+import EditUser from "./pages/EditUser";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Books/>}/>
+          <Route path="/" element={<Login/>}/>
+          <Route path="/Users" element={<Users/>}/>
+          <Route path="/Register" element={<Register/>}/>
+          <Route path="/User/Edit/:id" element={<EditUser/>}/>
+
           <Route path="/Books" element={<Books/>}/>
-          <Route path="/Materials" element={<Materials/>}/>
-          <Route path="/Material/Add" element={<AddMaterial/>}/>
           <Route path="/Book/Add" element={<AddBook/>}/>
           <Route path="/Book/Edit/:isbn" element={<EditBook/>}/>
+          
+          <Route path="/Materials" element={<Materials/>}/>
+          <Route path="/Material/Add" element={<AddMaterial/>}/>
           <Route path="/Material/Edit/:id" element={<EditMaterial/>}/>
         </Routes>
       </BrowserRouter>

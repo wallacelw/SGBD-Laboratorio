@@ -25,7 +25,7 @@ const AddBook = () => {
         e.preventDefault()
         try {
             await axios.post("http://localhost:3333/livro", book)
-            navigate("/");
+            navigate("/Books");
         } catch (error) {
             console.log(error)
             setError(true)
@@ -42,7 +42,7 @@ const AddBook = () => {
             <input type="text" placeholder="Estado de Conservação" onChange={handleChange} name="estado_de_conservacao"/>
             <input type="text" placeholder="Localização Física" onChange={handleChange} name="localizacao_fisica"/>
             <input type="number" placeholder="URI da Capa" onChange={handleChange} name="uri_da_capa_do_livro"/>
-            <button onClick={handleClick}> Adcionar </button>
+            <button onClick={handleClick}> Adicionar </button>
             {error && "Algo deu errado!"}
             <Link to="/Books"> Voltar para a Página Inicial </Link>
         </div>
