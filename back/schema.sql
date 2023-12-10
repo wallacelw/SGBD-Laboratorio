@@ -87,3 +87,18 @@ values
     "../book-images/9788522005239.jpg"
 )
 ;
+
+insert into Materiais_Ditaticos (
+	id,
+    descricao,
+    numero_de_serie,
+    data_de_aquisicao,
+    estado_de_conservacao,
+    localizacao_fisica,
+    uri_da_foto_do_material
+) 
+values 
+(1, 'descricao', '123', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'), 
+(2, 'descrica2o', '321', '1000-01-01 00:00:00', 'ok', 'atras', '2093asd'),
+(3, 'descricao3', '213', '1000-01-01 00:00:00', 'ok', 'atras', '20321sd')
+;

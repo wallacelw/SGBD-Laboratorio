@@ -16,6 +16,7 @@ const app = express()
 app.use(cors());
 app.use(express.json())
 app.use(cookieParser())
+
 /*
     Aqui ficarão as funções para a tabela dos livros.
 */
@@ -47,7 +48,7 @@ app.get("/livro/byCategory/:categoria", async (req, res) => {
 })
 
 app.get("/livro/byAuthor/:autor", async (req, res) => {
-    const category = req.params.autor
+    const autor = req.params.autor
     const result = await db.getLivroByAutor(autor)
     res.status(200).send(result)
 })
@@ -66,7 +67,6 @@ app.get("/categoria/:categoria", async (req, res) => {
     res.status(200).send(livro)
 })
 
-
 // POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
 app.post("/livro", isAuthorized, async (req, res) => {
     if (!req.user || req.user.funcao != "administrador") {
@@ -76,6 +76,10 @@ app.post("/livro", isAuthorized, async (req, res) => {
     const livro = await db.createLivro(isbn, titulo, descricao, data, estado, loc, uri)
     res.status(201).send(livro)
 })
+
+// app.delete("/livro/:isbn", async (req, res) => {
+
+// })
 
 /*
     Aqui ficarão as funções para a tabela dos materiais.
