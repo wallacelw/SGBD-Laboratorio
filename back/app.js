@@ -17,6 +17,8 @@ app.use(cors());
 app.use(express.json())
 app.use(cookieParser())
 
+
+
 /*
     Aqui ficarão as funções para a tabela dos livros.
 */
@@ -77,9 +79,10 @@ app.post("/livro", isAuthorized, async (req, res) => {
     res.status(201).send(livro)
 })
 
-// app.delete("/livro/:isbn", async (req, res) => {
+// TODO:
+// app.delete("/livro/:isbn", async (req, res) => { })
 
-// })
+
 
 /*
     Aqui ficarão as funções para a tabela dos materiais.
@@ -127,6 +130,8 @@ app.post("/material", isAuthorized, async (req, res) => {
     res.status(201).send(material)
 })
 
+
+
 /*
     Aqui ficarão as funções para a tabela dos emprestimos.
 */
@@ -167,6 +172,20 @@ app.post("/emprestimo/updateStatus", async (req, res) => {
     const emprestimo = await db.updateEmprestimoStatus(id, status, type)
     res.status(201).send(emprestimo)
 })
+
+
+/*
+    Aqui ficarão as funções para usuarios.
+*/
+
+// TODO!
+// app.get("/usuarios")
+// app.delete("/usuario/:id")
+
+
+/*
+    Aqui ficarão as funções para login.
+*/
 
 app.post("/register", isAuthorized, async (req, res) => {
     const {id,
@@ -219,6 +238,7 @@ app.get("/logout", (req, res) => {
     })
     res.status(200)
 })
+
 
 
 // Abre o servidor local na porta 3333

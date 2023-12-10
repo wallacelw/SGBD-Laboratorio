@@ -25,7 +25,7 @@ const EditMaterial = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8800/material/${materialId}`, material);
+            await axios.put(`http://localhost:3333/material/${materialId}`, material);
             navigate("/Materials");
         } catch (err) {
             console.log(err);

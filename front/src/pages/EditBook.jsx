@@ -25,7 +25,7 @@ const EditBook = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8800/livro/${bookId}`, book);
+            await axios.put(`http://localhost:3333/livro/${bookId}`, book);
             navigate("/");
         } catch (err) {
             console.log(err);
