@@ -35,17 +35,17 @@ const EditMaterial = () => {
 
     return (
         <div className="form">
-            <h1> Atualizar o livro </h1>
-            <input type="number" placeholder="ID" onChange={handleChange} name="id"/>
-            <input type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
-            <input type="number" placeholder="Número de Série" onChange={handleChange} name="numero_de_serie"/>
-            <input type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>
-            <input type="text" placeholder="Estado de Conservação" onChange={handleChange} name="estado_de_conservacao"/>
-            <input type="text" placeholder="Localização Física" onChange={handleChange} name="localizacao_fisica"/>
-            <input type="number" placeholder="URI do Material" onChange={handleChange} name="uri_da_foto_do_material"/>
+            <h1 className="title"> Atualizar o material </h1>
+            <input className="box_input" type="number" placeholder="ID" onChange={handleChange} name="id"/>
+            <input className="box_input" type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
+            <input className="box_input" type="number" placeholder="Número de Série" onChange={handleChange} name="numero_de_serie"/>
+            <input className="box_input" type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>
+            <input className="box_input" type="text" placeholder="Estado de Conservação" onChange={handleChange} name="estado_de_conservacao"/>
+            <input className="box_input" type="text" placeholder="Localização Física" onChange={handleChange} name="localizacao_fisica"/>
+            <input className="box_input" type="number" placeholder="URI do Material" onChange={handleChange} name="uri_da_foto_do_material"/>
             <button onClick={handleClick}> Editar </button>
             {error && "Algo deu errado!"}
-            <Link to="/Materials"> Voltar para a Página Inicial </Link>
+            <Link className="hyperlink"to="/Materials"> Voltar para a Página Inicial </Link>
         </div>
     )
 }

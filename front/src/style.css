@@ -110,5 +110,11 @@ input{
 }
 
 .button_redirect{
-    color: black;
+    margin-top: 65px;
+}
+
+.title_q{
+    color: #fff;
+    background-color: black;
+    border: 2px solid white;
 }

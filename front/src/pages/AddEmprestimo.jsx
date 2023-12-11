@@ -7,7 +7,6 @@ const AddEmprestimo = () => {
         id_do_livro: null,
         id_do_material: null,
         id_do_usuario: null,
-        tipo_do_item: "",
         data_do_emprestimo: null,
         data_de_devolucao_prevista: null,
         status_do_emprestimo: ""
@@ -15,7 +14,7 @@ const AddEmprestimo = () => {
 
     const navigate = useNavigate();
 
-    const [error,setError] = useState(false)
+    const [error,setError] = useState(false)    
 
     const handleChange = (e) => {
         setEmprestimo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -62,9 +61,6 @@ const AddEmprestimo = () => {
                         <input className="box_input" type="number" placeholder="ID do Usuário" onChange={handleChange} name="id_do_usuario"/>
                     </div>
                     <div>
-                        <inpu className="box_input"t type="text" onChange={handleChange} name="tipo_do_item" value={"livro"} hidden/>
-                    </div>
-                    <div>
                         <input className="box_input" type="date" placeholder="Data de Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
                     </div>
                     <div>
@@ -83,25 +79,22 @@ const AddEmprestimo = () => {
         {selectedOption === 'material' && (
                 <div>
                     <div>
-                        <input type="number" placeholder="ID do Livro" onChange={handleChange} name="id_do_livro" value={null} hidden/>
+                        <input className="box_input" type="number" placeholder="ID do Livro" onChange={handleChange} name="id_do_livro" value={null} hidden/>
                     </div>
                     <div>
-                        <input type="number" placeholder="ID do Material" onChange={handleChange} name="id_do_material"/>
+                        <input className="box_input" type="number" placeholder="ID do Material" onChange={handleChange} name="id_do_material"/>
                     </div>
                     <div>
-                        <input type="number" placeholder="ID do Usuário" onChange={handleChange} name="id_do_usuario"/>
+                        <input className="box_input" type="number" placeholder="ID do Usuário" onChange={handleChange} name="id_do_usuario"/>
                     </div>
                     <div>
-                        <input type="text" onChange={handleChange} name="tipo_do_item" value={"material"} hidden/>
+                        <input className="box_input" type="date" placeholder="Data de Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
                     </div>
                     <div>
-                        <input type="date" placeholder="Data de Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
+                        <input className="box_input" type="date" placeholder="Data de Devolução" onChange={handleChange} name="data_de_devolucao_prevista"/>
                     </div>
                     <div>
-                        <input type="date" placeholder="Data de Devolução" onChange={handleChange} name="data_de_devolucao_prevista"/>
-                    </div>
-                    <div>
-                        <input type="text" placeholder="Status" onChange={handleChange} name="status_do_emprestimo"/>
+                        <input className="box_input" type="text" placeholder="Status" onChange={handleChange} name="status_do_emprestimo"/>
                     </div>
                     <div>
                         <button onClick={handleClick}> Adicionar </button>

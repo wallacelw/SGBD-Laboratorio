@@ -32,10 +32,10 @@ const Emprestimos = () => {
     return (
         <div>
             <h1 className="title"> Emprestimos </h1>
-            <div className="emprestimos">
+            <div className="books">
                 {emprestimos.map(emprestimo => (
-                    <div className="emprestimo" key={emprestimo.id}>
-                        <h2>{emprestimo.id_do_livro}</h2>
+                    <div className="book" key={emprestimo.id}>
+                        <h2 className="title_q">{emprestimo.id_do_livro}</h2>
                         <h2>{emprestimo.id_do_material}</h2>
                         <button className="delete" onClick={() => handleDelete(emprestimo.id)}> Apagar </button>
                         <button className="edit"> <Link to={`/Emprestimo/Edit/${emprestimo.id}`}> Editar </Link> </button>
