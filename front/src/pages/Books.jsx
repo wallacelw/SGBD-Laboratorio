@@ -31,7 +31,7 @@ const Books = () => {
 
     return (
         <div>
-            <h1> Livros </h1>
+            <h1 className="title"> Livros </h1>
             <div className="books">
                 {books.map(book => (
                     <div className="book" key={book.isbn}>
@@ -43,7 +43,7 @@ const Books = () => {
                     </div>
                 ))}
             </div>
-            <button><Link to="/Book/Add"> Adicionar novo livro </Link></button>
+            <button><Link className="button_redirect" to="/Book/Add"> Adicionar novo livro </Link></button>
         </div>
     )
 }

@@ -38,18 +38,34 @@ const Login = () => {
 
     return (
         <div className="form">
-            <h1> Faça o Login com a sua Conta! </h1>
-            <input type="text" placeholder="Login" onChange={handleChange} name="login"/>
-            <input type="password" placeholder="Senha" onChange={handleChange} name="senha"/>
-            <button onClick={handleClickLogin}> Entrar </button>
-            {error && "Algo deu errado no Login!"}
+            <h1 className="title"> Faça o Login com a sua Conta! </h1>
+            <input className="box_input" type="text" placeholder="Login" onChange={handleChange} name="login"/>
+            <input className="box_input" type="password" placeholder="Senha" onChange={handleChange} name="senha"/>
+            
+            <div className="login_button_container">
+                <button className="login_button" onClick={handleClickLogin}> Entrar </button>
+                {error && "Algo deu errado no Login!"}
 
-            <button onClick={handleClickLogout}> Sair </button>
+                <button className="login_button" onClick={handleClickLogout}> Sair </button>
+            </div>
 
-            <Link to="/Register"> Ir para a tela de Cadastros </Link>
-            <Link to="/Users"> Ir para a tela de Usuarios </Link>
-            <Link to="/Books"> Ir para a tela de Livros </Link>
-            <Link to="/Materials"> Ir para a tela de Materiais </Link>
+            <div className="hyperlink_container">
+                <div>
+                <Link className="hyperlink" to="/Register"> Ir para a tela de Cadastros </Link>
+                </div>
+                <div>
+                <Link className="hyperlink" to="/Users"> Ir para a tela de Usuarios </Link>
+                </div>
+                <div>
+                <Link className="hyperlink" to="/Books"> Ir para a tela de Livros </Link>
+                </div>
+                <div>
+                <Link className="hyperlink" to="/Materials"> Ir para a tela de Materiais </Link>
+                </div>
+                <div>
+                <Link className="hyperlink" to="/Emprestimos"> Ir para a tela de Emprestimos </Link>
+                </div>
+            </div>
         </div>
     )
 }

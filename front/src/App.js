@@ -10,6 +10,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Users from "./pages/Users";
 import EditUser from "./pages/EditUser";
+import Emprestimos from "./pages/Emprestimos";
+import AddEmprestimos from "./pages/AddEmprestimo";
 
 function App() {
   return (
@@ -28,6 +30,9 @@ function App() {
           <Route path="/Materials" element={<Materials/>}/>
           <Route path="/Material/Add" element={<AddMaterial/>}/>
           <Route path="/Material/Edit/:id" element={<EditMaterial/>}/>
+
+          <Route path="/Emprestimos" element={<Emprestimos/>}/>
+          <Route path="/Emprestimo/Add" element={<AddEmprestimos/>}/>
         </Routes>
       </BrowserRouter>
     </div>

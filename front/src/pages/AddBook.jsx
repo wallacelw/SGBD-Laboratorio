@@ -34,17 +34,18 @@ const AddBook = () => {
 
     return (
         <div className="form">
-            <h1> Adicionar novo livro </h1>
-            <input type="number" placeholder="ISBN" onChange={handleChange} name="isbn"/>
-            <input type="text" placeholder="Titulo" onChange={handleChange} name="titulo"/>
-            <input type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
-            <input type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>
-            <input type="text" placeholder="Estado de Conservação" onChange={handleChange} name="estado_de_conservacao"/>
-            <input type="text" placeholder="Localização Física" onChange={handleChange} name="localizacao_fisica"/>
-            <input type="number" placeholder="URI da Capa" onChange={handleChange} name="uri_da_capa_do_livro"/>
+            <h1 className="title"> Adicionar novo livro </h1>
+
+            <input className="box_input" type="number" placeholder="ISBN" onChange={handleChange} name="isbn"/>
+            <input className="box_input" type="text" placeholder="Titulo" onChange={handleChange} name="titulo"/>
+            <input className="box_input" type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
+            <input className="box_input" type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>
+            <input className="box_input" type="text" placeholder="Estado de Conservação" onChange={handleChange} name="estado_de_conservacao"/>
+            <input className="box_input" type="text" placeholder="Localização Física" onChange={handleChange} name="localizacao_fisica"/>
+            <input className="box_input" type="number" placeholder="URI da Capa" onChange={handleChange} name="uri_da_capa_do_livro"/>
             <button onClick={handleClick}> Adicionar </button>
             {error && "Algo deu errado!"}
-            <Link to="/Books"> Voltar para a Página Inicial </Link>
+            <Link className="hyperlink" to="/Books"> Voltar para a Página Inicial </Link>
         </div>
     )
 }

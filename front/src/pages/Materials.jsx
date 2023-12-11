@@ -31,7 +31,7 @@ const Materials = () => {
 
     return (
         <div>
-            <h1> Materiais </h1>
+            <h1 className="title"> Materiais </h1>
             <div className="materials">
                 {materials.map(material => (
                     <div className="material" key={material.id}>
@@ -43,7 +43,7 @@ const Materials = () => {
                     </div>
                 ))}
             </div>
-            <button><Link to="/Material/Add"> Adicionar novo material </Link></button>
+            <button><Link className="button_redirect" to="/Material/Add"> Adicionar novo material </Link></button>
         </div>
     )
 }
