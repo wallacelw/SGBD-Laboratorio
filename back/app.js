@@ -105,10 +105,10 @@ app.post("/livro", async (req, res) => {
 --------------------------------
 */
 
-app.put("/livro/:oldIsbn", async (req, res) => {
-    const oldIsbn = req.params.oldIsbn
-    const {isbn, titulo, descricao, data, estado, loc, uri} = req.body
-    const livro = await db.editLivro(oldIsbn, isbn, titulo, descricao, data, estado, loc, uri)
+app.put("/livro/:isbn", async (req, res) => {
+    const isbn = req.params.isbn
+    const {titulo, descricao, data, estado, loc, uri} = req.body
+    const livro = await db.editLivro(isbn, titulo, descricao, data, estado, loc, uri)
     res.status(200).send(livro)
 })
 
@@ -130,7 +130,6 @@ app.delete("/livro/:isbn", async (req, res) => {
     Aqui ficarão as funções para a tabela dos Materiais
 ----------------------------------------------------------------
 */
-
 
 /* 
 --------------------------------
@@ -178,8 +177,8 @@ app.get("/material/byConservation/:estado_de_conservação", async (req, res) =>
 
 // POST Materiais. Cria um Materiais novo na base de dados de acordo com as informações passadas
 app.post("/material", async (req, res) => {
-    const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
-    const material = await db.createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
+    const {id, descricao, numero_de_serie, data, estado, loc, uri} = req.body
+    const material = await db.createMaterial(id, descricao, numero_de_serie, data, estado, loc, uri)
     res.status(201).send(material)
 })
 
@@ -198,10 +197,10 @@ app.post("/material", async (req, res) => {
 --------------------------------
 */
 
-app.put("/material/:oldId", async (req, res) => {
-    const oldId = req.params.oldId
-    const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
-    const material = await db.editMaterial(oldId, id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
+app.put("/material/:id", async (req, res) => {
+    const id = req.params.id
+    const {descricao, numero_de_serie, data, estado, loc, uri} = req.body
+    const material = await db.editMaterial(id, descricao, numero_de_serie, data, estado, loc, uri)
     res.status(200).send(material)
 })
 
@@ -217,6 +216,118 @@ app.delete("/material/:id", async (req, res) => {
     res.status(200).send(material)
 })
 
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos USUARIOS
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
+app.get("/usuarios", async (req, res) => {
+    const usuarios = await db.getUsers();
+    res.status(200).send(usuarios)
+})
+
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
+app.post("/register", async (req, res) => {
+    const {id, nome, sobrenome, funcao, login, senha, uri} = req.body
+    const usuario = await db.createUser(id, nome, sobrenome, funcao, login, senha, uri)
+    res.status(201).send(usuario)
+})
+
+// app.post("/register", isAuthorized, async (req, res) => {
+//     const {id,
+//            nome,
+//            sobrenome,
+//            funcao,
+//            login,
+//            senha,
+//            uri_da_foto_do_usuario} = req.body;
+
+//     // Isso tudo deveria ser feito por um controller separado. Futura refatoração vai mexer aqui.
+//     if (!req.user || req.user.funcao != "administrador") {
+//         return res.status(401).send("Somente administradores podem criar novos usuários.")
+//     }
+//     const users = await db.getUserByLogin(login)
+//     if (users.length() > 0) {
+//         return res.status(409).send("Login já está em uso!")
+//     }
+
+//     let hashedPassword = await bcrypt.hash(senha, 8)
+//     const result = db.createUser(id, nome, sobrenome, funcao, login, hashedPassword, uri_da_foto_do_usuario)
+
+//     res.status(201).send(result)
+// })
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+app.put("/usuario/:id", async (req, res) => {
+    const id = req.params.id
+    const {nome, sobrenome, funcao, login, senha, uri} = req.body
+    const usuario = await db.editUser(id, nome, sobrenome, funcao, login, senha, uri)
+    res.status(200).send(usuario)
+})
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+app.delete("/usuario/:id", async (req, res) => {
+    const id = req.params.id
+    const usuario = await db.deleteUser(id)
+    res.status(200).send(usuario)
+})
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para LOGIN
+----------------------------------------------------------------
+*/
+
+app.post("/login", async (req, res) => {
+    const {login, senha} = req.body
+    const users = await db.getUserByLogin(login)
+    if (!users || !await bcrypt.compare(senha, users[0].senha)) {
+        res.status(401).send("Login ou senha inválidos.")
+    }
+    const id = users[0].id
+    const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
+        expiresIn: 90
+    });
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() + 90 * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    }
+    res.cookie('userSave', token, cookieOptions);
+    res.status(200)
+})
+
+app.get("/logout", (req, res) => {
+    res.cookie('userSave', 'logout', {
+        expires: new Date(Date.now() + 2 * 1000),
+        httpOnly: true
+    })
+    res.status(200)
+})
 
 /* 
 ----------------------------------------------------------------
@@ -261,73 +372,11 @@ app.post("/emprestimo/updateStatus", async (req, res) => {
     res.status(201).send(emprestimo)
 })
 
-
-/*
-    Aqui ficarão as funções para usuarios.
+/* 
+----------------------------------------------------------------
+    FIM das funções
+----------------------------------------------------------------
 */
-
-// TODO!
-// app.get("/usuarios")
-// app.delete("/usuario/:id")
-
-
-/*
-    Aqui ficarão as funções para login.
-*/
-
-app.post("/register", isAuthorized, async (req, res) => {
-    const {id,
-           nome,
-           sobrenome,
-           funcao,
-           login,
-           senha,
-           uri_da_foto_do_usuario} = req.body;
-
-    // Isso tudo deveria ser feito por um controller separado. Futura refatoração vai mexer aqui.
-    if (!req.user || req.user.funcao != "administrador") {
-        return res.status(401).send("Somente administradores podem criar novos usuários.")
-    }
-    const users = await db.getUserByLogin(login)
-    if (users.length() > 0) {
-        return res.status(409).send("Login já está em uso!")
-    }
-
-    let hashedPassword = await bcrypt.hash(senha, 8)
-    const result = db.createUser(id, nome, sobrenome, funcao, login, hashedPassword, uri_da_foto_do_usuario)
-
-    res.status(201).send(result)
-})
-
-app.post("/login", async (req, res) => {
-    const {login, senha} = req.body
-    const users = await db.getUserByLogin(login)
-    if (!users || !await bcrypt.compare(senha, users[0].senha)) {
-        res.status(401).send("Login ou senha inválidos.")
-    }
-    const id = users[0].id
-    const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
-        expiresIn: 90
-    });
-    const cookieOptions = {
-        expires: new Date(
-            Date.now() + 90 * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true
-    }
-    res.cookie('userSave', token, cookieOptions);
-    res.status(200)
-})
-
-app.get("/logout", (req, res) => {
-    res.cookie('userSave', 'logout', {
-        expires: new Date(Date.now() + 2 * 1000),
-        httpOnly: true
-    })
-    res.status(200)
-})
-
-
 
 // Abre o servidor local na porta 3333
 const port = 3333

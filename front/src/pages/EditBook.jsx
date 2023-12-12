@@ -4,7 +4,6 @@ import axios from "axios";
 
 const EditBook = () => {
     const [book, setBook] = useState({
-        isbn: null,
         titulo: "",
         descricao: "",
         data_de_aquisicao: null,
@@ -15,7 +14,7 @@ const EditBook = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const bookId = location.pathname.split("/")[3];
+    const bookIsbn = location.pathname.split("/")[3];
     const [error,setError] = useState(false);
 
     const handleChange = (e) => {
@@ -25,7 +24,7 @@ const EditBook = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3333/livro/${bookId}`, book);
+            await axios.put(`http://localhost:3333/livro/${bookIsbn}`, book);
             navigate("/Books");
         } catch (err) {
             console.log(err);
@@ -36,7 +35,6 @@ const EditBook = () => {
     return (
         <div className="form">
             <h1 className="title"> Atualizar o livro </h1>
-            <input className="box_input" type="number" placeholder="ISBN" onChange={handleChange} name="isbn"/>
             <input className="box_input" type="text" placeholder="Titulo" onChange={handleChange} name="titulo"/>
             <input className="box_input" type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
             <input className="box_input" type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>

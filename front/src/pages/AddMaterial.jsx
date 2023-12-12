@@ -13,6 +13,8 @@ const AddMaterial = () => {
         uri_da_foto_do_material: null
     });
 
+    console.log(material)
+
     const navigate = useNavigate();
 
     const [error,setError] = useState(false)
