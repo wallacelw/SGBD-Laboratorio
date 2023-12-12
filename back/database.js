@@ -241,10 +241,15 @@ export async function getUsers() {
     return result
 }
 
-// export async function getUserByLogin(login) {
-//     const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
-//     return result
-// }
+export async function getUserByLogin(login) {
+    const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
+    return result
+}
+
+export async function getUserById(id) {
+    const [result] = await pool.query("SELECT * FROM Usuarios WHERE id = ?", [id])
+    return result
+}
 
 /* 
 --------------------------------
