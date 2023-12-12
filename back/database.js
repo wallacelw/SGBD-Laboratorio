@@ -118,17 +118,16 @@ export async function getEmprestimo() {
 }
 
 // Cria emprestimos
-export async function createEmprestimo(id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo) {
+export async function createEmprestimo(id_do_livro, id_do_material, id_do_usuario,  data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo) {
     const result = await pool.query(`
     INSERT INTO Emprestimos (id_do_livro,
                         id_do_material,
                         id_do_usuario,
-                        tipo_do_item,
                         data_do_emprestimo,
                         data_de_devolucao_prevista,
                         status_do_emprestimo)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [id_do_livro, id_do_material, id_do_usuario, tipo_do_item, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo])
+    VALUES (?, ?, ?, ?, ?, ?)
+    `, [id_do_livro, id_do_material, id_do_usuario, data_do_emprestimo, data_de_devolucao_prevista, status_do_emprestimo])
     return result
 }
 

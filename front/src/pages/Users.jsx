@@ -31,7 +31,7 @@ const Users = () => {
 
     return (
         <div>
-            <h1> Usuários </h1>
+            <h1 className="title"> Usuários </h1>
             <div className="users">
                 {users.map(user => (
                     <div className="user" key={user.id}>
@@ -43,7 +43,10 @@ const Users = () => {
                     </div>
                 ))}
             </div>
-            <button><Link to="/Register"> Cadastrar novo Usuario </Link></button>
+
+            <button>
+                <Link className="button_redirect" to="/Register"> Cadastrar novo Usuario </Link>
+            </button>
         </div>
     )
 }

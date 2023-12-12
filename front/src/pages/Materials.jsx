@@ -31,19 +31,18 @@ const Materials = () => {
 
     return (
         <div>
-            <h1> Materiais </h1>
-            <div className="materials">
+            <h1 className="title"> Materiais </h1>
+            <div className="books">
                 {materials.map(material => (
-                    <div className="material" key={material.id}>
-                        {material.uri_da_foto_do_material && <img src={material.uri_da_foto_do_material} alt="" />}
-                        <h2>{material.numero_de_serie}</h2>
+                    <div className="book" key={material.id}>
+                        <h2 className="title_q">{material.numero_de_serie}</h2>
                         <p>{material.descricao}</p>
                         <button className="delete" onClick={() => handleDelete(material.id)}> Apagar </button>
                         <button className="edit"> <Link to={`/Material/Edit/${material.id}`}> Editar </Link> </button>
                     </div>
                 ))}
             </div>
-            <button><Link to="/Material/Add"> Adicionar novo material </Link></button>
+            <button className="button_redirect"><Link  to="/Material/Add"> Adicionar novo material </Link></button>
         </div>
     )
 }
