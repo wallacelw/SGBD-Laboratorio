@@ -15,7 +15,7 @@ const EditUser = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const UserId = location.pathname.split("/")[2];
+    const UserId = location.pathname.split("/")[3];
     const [error,setError] = useState(false)
 
     const handleChange = (e) => {

@@ -19,8 +19,16 @@ app.use(cookieParser())
 
 
 
-/*
+/* 
+----------------------------------------------------------------
     Aqui ficarão as funções para a tabela dos livros.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
 */
 
 // GET Livros. Através de uma requisição GET, retorna todos os Livros da base de dados
@@ -69,19 +77,52 @@ app.get("/categoria/:categoria", async (req, res) => {
     res.status(200).send(livro)
 })
 
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
 // POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
-app.post("/livro", isAuthorized, async (req, res) => {
-    if (!req.user || req.user.funcao != "administrador") {
-        return res.status(401).send("Somente administradores podem criar novos livros.")
-    }
+app.post("/livro", async (req, res) => {
     const {isbn, titulo, descricao, data, estado, loc, uri} = req.body
     const livro = await db.createLivro(isbn, titulo, descricao, data, estado, loc, uri)
     res.status(201).send(livro)
 })
 
-// TODO:
-// app.delete("/livro/:isbn", async (req, res) => { })
+// app.post("/livro", isAuthorized, async (req, res) => {
+//     if (!req.user || req.user.funcao != "administrador") {
+//         return res.status(401).send("Somente administradores podem criar novos livros.")
+//     }
+//     const {isbn, titulo, descricao, data, estado, loc, uri} = req.body
+//     const livro = await db.createLivro(isbn, titulo, descricao, data, estado, loc, uri)
+//     res.status(201).send(livro)
+// })
 
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+app.put("/livro/:oldIsbn", async (req, res) => {
+    const oldIsbn = req.params.oldIsbn
+    const {isbn, titulo, descricao, data, estado, loc, uri} = req.body
+    const livro = await db.editLivro(oldIsbn, isbn, titulo, descricao, data, estado, loc, uri)
+    res.status(200).send(livro)
+})
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+app.delete("/livro/:isbn", async (req, res) => {
+    const isbn = req.params.isbn
+    const livro = await db.deleteLivro(isbn)
+    res.status(200).send(livro)
+})
 
 
 /*

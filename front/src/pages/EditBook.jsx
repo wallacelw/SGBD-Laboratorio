@@ -15,7 +15,7 @@ const EditBook = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const bookId = location.pathname.split("/")[2];
+    const bookId = location.pathname.split("/")[3];
     const [error,setError] = useState(false);
 
     const handleChange = (e) => {
@@ -26,7 +26,7 @@ const EditBook = () => {
         e.preventDefault();
         try {
             await axios.put(`http://localhost:3333/livro/${bookId}`, book);
-            navigate("/");
+            navigate("/Books");
         } catch (err) {
             console.log(err);
             setError(true);

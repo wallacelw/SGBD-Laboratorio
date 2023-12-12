@@ -15,6 +15,18 @@ const pool = mysql.createPool({
 }).promise()
 
 
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos livros.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
 // Função que faz a query para buscar todos os Livros do DB
 export async function getLivros() {
     const [result] = await pool.query("SELECT * FROM Livros")
@@ -65,6 +77,12 @@ export async function getLivroByAutor(autor) {
     return result
 }
 
+/* 
+--------------------------------
+    Requests do tipo PUSH
+--------------------------------
+*/
+
 // Função que cria livro
 export async function createLivro(isbn, titulo, descricao, data, estado, loc, uri) {
     const result = await pool.query(`
@@ -77,6 +95,43 @@ export async function createLivro(isbn, titulo, descricao, data, estado, loc, ur
                         uri_da_capa_do_livro)
     VALUES (?, ?, ?, ?, ?, ?, ?)
     `, [isbn, titulo, descricao, data, estado, loc, uri])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+export async function editLivro(old_isbn, isbn, titulo, descricao, data, estado, loc, uri) {
+    const result = await pool.query(`
+    UPDATE Livros
+    SET 
+        isbn = ?,
+        titulo = ?,
+        descricao = ?,
+        data_de_aquisicao = ?,
+        estado_de_conservacao = ?,
+        localizacao_fisica = ?,
+        uri_da_capa_do_livro = ?
+    WHERE
+        isbn = ?;
+    `, [isbn, titulo, descricao, data, estado, loc, uri, old_isbn])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+export async function deleteLivro(isbn) {
+    const result = await pool.query(`
+    DELETE FROM Livros
+    WHERE isbn = ?;
+    `, [isbn])
     return result
 }
 

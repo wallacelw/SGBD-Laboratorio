@@ -21,7 +21,7 @@ const Books = () => {
 
     const handleDelete = async (isbn) => {
         try {
-            await axios.delete("http://localhost:3333/livro"+isbn)
+            await axios.delete(`http://localhost:3333/livro/${isbn}`);
             window.location.reload()
         } 
         catch (error) {

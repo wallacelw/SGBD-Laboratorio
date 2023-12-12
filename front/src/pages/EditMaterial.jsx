@@ -15,7 +15,7 @@ const EditMaterial = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const materialId = location.pathname.split("/")[2];
+    const materialId = location.pathname.split("/")[3];
     const [error,setError] = useState(false);
 
     const handleChange = (e) => {
