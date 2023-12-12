@@ -21,7 +21,7 @@ app.use(cookieParser())
 
 /* 
 ----------------------------------------------------------------
-    Aqui ficarão as funções para a tabela dos livros.
+    Aqui ficarão as funções para a tabela dos LIVROS
 ----------------------------------------------------------------
 */
 
@@ -125,8 +125,17 @@ app.delete("/livro/:isbn", async (req, res) => {
 })
 
 
-/*
-    Aqui ficarão as funções para a tabela dos materiais.
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos Materiais
+----------------------------------------------------------------
+*/
+
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
 */
 
 // GET Materiais. Através de uma requisição GET, retorna todos os Materiais da base de dados
@@ -161,20 +170,58 @@ app.get("/material/byConservation/:estado_de_conservação", async (req, res) =>
     res.status(200).send(material)
 })
 
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
 // POST Materiais. Cria um Materiais novo na base de dados de acordo com as informações passadas
-app.post("/material", isAuthorized, async (req, res) => {
-    if (!req.user || req.user.funcao != "administrador") {
-        return res.status(401).send("Somente administradores podem criar novos materiais.")
-    }
+app.post("/material", async (req, res) => {
     const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
     const material = await db.createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
     res.status(201).send(material)
 })
 
+// app.post("/material", isAuthorized, async (req, res) => {
+//     if (!req.user || req.user.funcao != "administrador") {
+//         return res.status(401).send("Somente administradores podem criar novos materiais.")
+//     }
+//     const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
+//     const material = await db.createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
+//     res.status(201).send(material)
+// })
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+app.put("/material/:oldId", async (req, res) => {
+    const oldId = req.params.oldId
+    const {id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material} = req.body
+    const material = await db.editMaterial(oldId, id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material)
+    res.status(200).send(material)
+})
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+app.delete("/material/:id", async (req, res) => {
+    const id = req.params.id
+    const material = await db.deleteMaterial(id)
+    res.status(200).send(material)
+})
 
 
-/*
-    Aqui ficarão as funções para a tabela dos emprestimos.
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos EMPRESTIMOS
+----------------------------------------------------------------
 */
 
 // GET Emprestimos. Através de uma requisição GET, retorna todos os Emprestimos da base de dados

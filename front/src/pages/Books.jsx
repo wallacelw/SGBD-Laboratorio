@@ -43,6 +43,7 @@ const Books = () => {
                 ))}
             </div>
             <button className="button_redirect" ><Link to="/Book/Add"> Adicionar novo livro </Link></button>
+            <button className="button_redirect" ><Link to="/"> Voltar para página inicial </Link></button>
         </div>
     )
 }

@@ -21,7 +21,7 @@ const Materials = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete("http://localhost:3333/material"+id)
+            await axios.delete(`http://localhost:3333/material/${id}`)
             window.location.reload()
         } 
         catch (error) {
@@ -43,6 +43,7 @@ const Materials = () => {
                 ))}
             </div>
             <button className="button_redirect"><Link  to="/Material/Add"> Adicionar novo material </Link></button>
+            <button className="button_redirect" ><Link to="/"> Voltar para página inicial </Link></button>
         </div>
     )
 }

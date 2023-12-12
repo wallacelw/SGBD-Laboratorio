@@ -17,7 +17,7 @@ const pool = mysql.createPool({
 
 /* 
 ----------------------------------------------------------------
-    Aqui ficarão as funções para a tabela dos livros.
+    Aqui ficarão as funções para a tabela dos LIVROS.
 ----------------------------------------------------------------
 */
 
@@ -79,7 +79,7 @@ export async function getLivroByAutor(autor) {
 
 /* 
 --------------------------------
-    Requests do tipo PUSH
+    Requests do tipo POST
 --------------------------------
 */
 
@@ -135,6 +135,19 @@ export async function deleteLivro(isbn) {
     return result
 }
 
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos MATERIAIS.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
 // Função que faz a query para buscar todos os materiais do DB
 export async function getMateriais() {
     const [result] = await pool.query("SELECT * FROM Materiais_Ditaticos")
@@ -152,6 +165,12 @@ export async function getCategoriaMaterial(categoria) {
     return result
 }
 
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
 export async function createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material) {
     const result = await pool.query(`
     INSERT INTO Materiais_Ditaticos (id,
@@ -165,6 +184,49 @@ export async function createMaterial(id, descricao, numero_de_serie, data_de_aqu
     `, [id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material])
     return result
 }
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+export async function editMaterial(oldId, id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material) {
+    const result = await pool.query(`
+    UPDATE Materiais_Ditaticos
+    SET 
+        id = ?,
+        descricao = ?,
+        numero_de_serie = ?,
+        data_de_aquisicao = ?,
+        estado_de_conservacao = ?,
+        localizacao_fisica = ?,
+        uri_da_foto_do_material = ?
+    WHERE
+        id = ?;
+    `, [id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material, oldId])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+export async function deleteMaterial(id) {
+    const result = await pool.query(`
+    DELETE FROM Materiais_Ditaticos
+    WHERE id = ?;
+    `, [id])
+    return result
+}
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos EMPRESTIMOS.
+----------------------------------------------------------------
+*/
 
 // Busca todos os emprestimos
 export async function getEmprestimo() {

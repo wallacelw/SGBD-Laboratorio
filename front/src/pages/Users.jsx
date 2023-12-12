@@ -21,7 +21,7 @@ const Users = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete("http://localhost:3333/usuario"+id)
+            await axios.delete(`http://localhost:3333/usuario/${id}`)
             window.location.reload()
         } 
         catch (error) {
