@@ -4,7 +4,6 @@ import axios from "axios";
 
 const EditMaterial = () => {
     const [material, setMaterial] = useState({
-        id: null,
         descricao: "",
         numero_de_serie: null,
         data_de_aquisicao: null,
@@ -15,7 +14,7 @@ const EditMaterial = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const materialId = location.pathname.split("/")[2];
+    const materialId = location.pathname.split("/")[3];
     const [error,setError] = useState(false);
 
     const handleChange = (e) => {
@@ -36,7 +35,6 @@ const EditMaterial = () => {
     return (
         <div className="form">
             <h1 className="title"> Atualizar o material </h1>
-            <input className="box_input" type="number" placeholder="ID" onChange={handleChange} name="id"/>
             <input className="box_input" type="text" placeholder="Descrição" onChange={handleChange} name="descricao"/>
             <input className="box_input" type="number" placeholder="Número de Série" onChange={handleChange} name="numero_de_serie"/>
             <input className="box_input" type="date" placeholder="Data de Aquisição" onChange={handleChange} name="data_de_aquisicao"/>

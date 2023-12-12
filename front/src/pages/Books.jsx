@@ -21,7 +21,7 @@ const Books = () => {
 
     const handleDelete = async (isbn) => {
         try {
-            await axios.delete("http://localhost:3333/livro"+isbn)
+            await axios.delete(`http://localhost:3333/livro/${isbn}`);
             window.location.reload()
         } 
         catch (error) {
@@ -43,6 +43,7 @@ const Books = () => {
                 ))}
             </div>
             <button className="button_redirect" ><Link to="/Book/Add"> Adicionar novo livro </Link></button>
+            <button className="button_redirect" ><Link to="/"> Voltar para página inicial </Link></button>
         </div>
     )
 }

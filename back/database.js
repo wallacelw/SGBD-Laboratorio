@@ -15,6 +15,18 @@ const pool = mysql.createPool({
 }).promise()
 
 
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos LIVROS.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
 // Função que faz a query para buscar todos os Livros do DB
 export async function getLivros() {
     const [result] = await pool.query("SELECT * FROM Livros")
@@ -22,7 +34,7 @@ export async function getLivros() {
 }
 
 // Função que faz a query para buscar os livros baseado no parametro
-export async function getBuscalivro(parametro,dados) {
+export async function getBuscalivro(parametro, dados) {
     const [result] = await pool.query(`SELECT * FROM Livros WHERE ${parametro} = "${dados}"`)
     return result
 }
@@ -65,6 +77,12 @@ export async function getLivroByAutor(autor) {
     return result
 }
 
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
 // Função que cria livro
 export async function createLivro(isbn, titulo, descricao, data, estado, loc, uri) {
     const result = await pool.query(`
@@ -80,36 +98,215 @@ export async function createLivro(isbn, titulo, descricao, data, estado, loc, ur
     return result
 }
 
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+export async function editLivro(isbn, titulo, descricao, data, estado, loc, uri) {
+    const result = await pool.query(`
+    UPDATE Livros
+    SET 
+        isbn = ?,
+        titulo = ?,
+        descricao = ?,
+        data_de_aquisicao = ?,
+        estado_de_conservacao = ?,
+        localizacao_fisica = ?,
+        uri_da_capa_do_livro = ?
+    WHERE
+        isbn = ?;
+    `, [isbn, titulo, descricao, data, estado, loc, uri, isbn])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+export async function deleteLivro(isbn) {
+    const result = await pool.query(`
+    DELETE FROM Livros
+    WHERE isbn = ?;
+    `, [isbn])
+    return result
+}
+
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos MATERIAIS.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
 // Função que faz a query para buscar todos os materiais do DB
 export async function getMateriais() {
-    const [result] = await pool.query("SELECT * FROM Materiais_Ditaticos")
+    const [result] = await pool.query("SELECT * FROM Materiais_Didaticos")
     return result
 }
 
 // Função que faz a query para buscar os materiais baseado no parametro
-export async function getBuscaMateriais(parametro,dados) {
-    const [result] = await pool.query(`SELECT * FROM Materiais_Ditaticos WHERE ${parametro} = "${dados}"`)
+export async function getBuscaMateriais(parametro, dados) {
+    const [result] = await pool.query(`SELECT * FROM Materiais_Didaticos WHERE ${parametro} = "${dados}"`)
     return result
 }
 
 export async function getCategoriaMaterial(categoria) {
-    const [result] = await pool.query("SELECT isbn FROM categoria_dos_materiais WHERE categoria = ?", [categoria])
+    const [result] = await pool.query("SELECT id FROM categoria_dos_materiais WHERE categoria = ?", [categoria])
     return result
 }
 
-export async function createMaterial(id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material) {
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
+export async function createMaterial(id, descricao, numero_de_serie, data, estado, loc, uri) {
     const result = await pool.query(`
-    INSERT INTO Materiais_Ditaticos (id,
-                        descricao,
-                        numero_de_serie,
-                        data_de_aquisicao,
-                        estado_de_conservacao,
-                        localizacao_fisica,
-                        uri_da_foto_do_material)
+    INSERT INTO Materiais_Didaticos (
+        id,
+        descricao,
+        numero_de_serie,
+        data_de_aquisicao,
+        estado_de_conservacao,
+        localizacao_fisica,
+        uri_da_foto_do_material)
     VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [id, descricao, numero_de_serie, data_de_aquisicao, estado_de_conservacao, localizacao_fisica, uri_da_foto_do_material])
+    `, [id, descricao, numero_de_serie, data, estado, loc, uri])
     return result
 }
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+export async function editMaterial(id, descricao, numero_de_serie, data, estado, loc, uri) {
+    const result = await pool.query(`
+    UPDATE Materiais_Didaticos
+    SET 
+        id = ?,
+        descricao = ?,
+        numero_de_serie = ?,
+        data_de_aquisicao = ?,
+        estado_de_conservacao = ?,
+        localizacao_fisica = ?,
+        uri_da_foto_do_material = ?
+    WHERE
+        id = ?;
+    `, [id, descricao, numero_de_serie, data, estado, loc, uri, id])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+export async function deleteMaterial(id) {
+    const result = await pool.query(`
+    DELETE FROM Materiais_Didaticos
+    WHERE id = ?;
+    `, [id])
+    return result
+}
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos USUARIOS.
+----------------------------------------------------------------
+*/
+
+/* 
+--------------------------------
+    Requests do tipo GET
+--------------------------------
+*/
+
+// Função que faz a query para buscar todos os usuarios do DB
+export async function getUsers() {
+    const [result] = await pool.query("SELECT * FROM Usuarios")
+    return result
+}
+
+export async function getUserByLogin(login) {
+    const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo POST
+--------------------------------
+*/
+
+export async function createUser(id, nome, sobrenome, funcao, login, senha, uri) {
+    const [result] = await pool.query("INSERT INTO Usuarios SET ?", {
+    id: id,
+    nome: nome,
+    sobrenome: sobrenome,
+    funcao: funcao,
+    login: login,
+    senha: senha,
+    uri_da_foto_do_usuario: uri})
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo PUT
+--------------------------------
+*/
+
+export async function editUser(id, nome, sobrenome, funcao, login, senha, uri) {
+    const result = await pool.query(`
+    UPDATE Usuarios
+    SET 
+        id = ?,
+        nome = ?,
+        sobrenome = ?,
+        funcao = ?,
+        login = ?,
+        senha = ?,
+        uri_da_foto_do_usuario = ?
+    WHERE
+        id = ?;
+    `, [id, nome, sobrenome, funcao, login, senha, uri, id])
+    return result
+}
+
+/* 
+--------------------------------
+    Requests do tipo DELETE
+--------------------------------
+*/
+
+export async function deleteUser(id) {
+    const result = await pool.query(`
+    DELETE FROM Usuarios
+    WHERE id = ?;
+    `, [id])
+    return result
+}
+
+
+/* 
+----------------------------------------------------------------
+    Aqui ficarão as funções para a tabela dos EMPRESTIMOS.
+----------------------------------------------------------------
+*/
 
 // Busca todos os emprestimos
 export async function getEmprestimo() {
@@ -165,22 +362,5 @@ export async function getEmprestimoByMaterial(id) {
 
 export async function getEmprestimoByUser(id) {
     const [result] = await pool.query("SELECT * FROM Emprestimos WHERE id_do_usuario = ?", [id])
-    return result
-}
-
-export async function getUserByLogin(login) {
-    const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
-    return result
-}
-
-export async function createUser(id, nome, sobrenome, funcao, login, senha, uri_da_foto_do_usuario) {
-    const [result] = await pool.query("INSERT INTO users SET ?", {
-    id: id,
-    nome: nome,
-    sobrenome: sobrenome,
-    funcao: funcao,
-    login: login,
-    senha: senha,
-    uri_da_foto_do_usuario: uri_da_foto_do_usuario})
     return result
 }

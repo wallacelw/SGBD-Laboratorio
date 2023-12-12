@@ -4,7 +4,6 @@ import axios from "axios";
 
 const EditUser = () => {
     const [user, setUser] = useState({
-        id: null,
         nome: "",
         sobrenome: "",
         funcao: "",
@@ -15,7 +14,7 @@ const EditUser = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const UserId = location.pathname.split("/")[2];
+    const UserId = location.pathname.split("/")[3];
     const [error,setError] = useState(false)
 
     const handleChange = (e) => {
@@ -33,13 +32,9 @@ const EditUser = () => {
         }
     };
 
-    //dbg
-    // console.log(user)
-
     return (
         <div className="form">
             <h1> Atualizar o usuario </h1>
-            <input type="number" placeholder="ID" onChange={handleChange} name="id"/>
 
             <input type="text" placeholder="Nome" onChange={handleChange} name="nome"/>
 

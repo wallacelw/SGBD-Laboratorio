@@ -21,7 +21,7 @@ const Users = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete("http://localhost:3333/usuario"+id)
+            await axios.delete(`http://localhost:3333/usuario/${id}`)
             window.location.reload()
         } 
         catch (error) {
@@ -44,9 +44,8 @@ const Users = () => {
                 ))}
             </div>
 
-            <button>
-                <Link className="button_redirect" to="/Register"> Cadastrar novo Usuario </Link>
-            </button>
+            <button className="button_redirect" ><Link to="/Register"> Cadastrar novo Usuario </Link></button>
+            <button className="button_redirect" ><Link to="/"> Voltar para página inicial </Link></button>
         </div>
     )
 }

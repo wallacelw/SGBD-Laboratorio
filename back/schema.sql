@@ -12,7 +12,7 @@ create table Livros(
     uri_da_capa_do_livro varchar(100)
 );
 
-create table Materiais_Ditaticos(
+create table Materiais_Didaticos(
 	id bigint primary key,
     descricao text(100),
     numero_de_serie bigint,
@@ -26,7 +26,7 @@ create table Categoria_dos_Materiais(
 	id bigint,
 	categoria varchar(100)
 );
-alter table Categoria_dos_Materiais add constraint fk_material_didaticos foreign key (id) references Materiais_Ditaticos (id);
+alter table Categoria_dos_Materiais add constraint fk_material_didaticos foreign key (id) references Materiais_Didaticos (id);
 
 create table Categoria_dos_Livros(
 	isbn bigint,
@@ -62,7 +62,7 @@ create table Usuarios(
 
 alter table Emprestimos add constraint fk_usuario foreign key (id_do_usuario) references Usuarios (id);
 alter table Emprestimos add constraint fk_emprestimo_livro foreign key (id_do_livro) references Livros (isbn);
-alter table Emprestimos add constraint fk_emprestimo_material foreign key (id_do_material) references Materiais_Ditaticos (id);
+alter table Emprestimos add constraint fk_emprestimo_material foreign key (id_do_material) references Materiais_Didaticos (id);
 
 insert into Livros (
 	isbn,
@@ -88,7 +88,7 @@ values
 )
 ;
 
-insert into Materiais_Ditaticos (
+insert into Materiais_Didaticos (
 	id,
     descricao,
     numero_de_serie,
