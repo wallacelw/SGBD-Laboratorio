@@ -10,7 +10,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Users from "./pages/Users";
 import EditUser from "./pages/EditUser";
-import Emprestimos from "./pages/Emprestimos";
 import AddEmprestimos from "./pages/AddBookEmprestimo";
 import ListarEmprestimos from "./pages/ListarEmprestimos";
 import EditarEmprestimo from "./pages/EditEmprestimo";
@@ -45,7 +44,6 @@ function App() {
             element={<AddMaterialEmprestimo />}
           />
 
-          <Route path="/Emprestimos" element={<Emprestimos />} />
           <Route path="/Emprestimo/Add" element={<AddEmprestimos />} />
           <Route path="/Emprestimo/Search" element={<ListarEmprestimos />} />
           <Route path="/editar-emprestimo/:id" element={<EditarEmprestimo />} />

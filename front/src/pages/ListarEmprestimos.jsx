@@ -27,12 +27,17 @@ function Emprestimos() {
   }, []);
 
   useEffect(() => {
-    const resultadosFiltrados = emprestimos.filter((emprestimo) => {
-      return emprestimo[filtro]
-        ?.toString()
-        .toLowerCase()
-        .includes(palavraChave.toLowerCase());
-    });
+    let resultadosFiltrados;
+    if (filtro === "") {
+      resultadosFiltrados = [...emprestimos];
+    } else {
+      resultadosFiltrados = emprestimos.filter((emprestimo) => {
+        return emprestimo[filtro]
+          ?.toString()
+          .toLowerCase()
+          .includes(palavraChave.toLowerCase());
+      });
+    }
     setEmprestimosFiltrados(resultadosFiltrados);
   }, [palavraChave, filtro, emprestimos]);
 

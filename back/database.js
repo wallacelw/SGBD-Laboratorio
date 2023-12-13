@@ -11,7 +11,7 @@ const pool = mysql
   .createPool({
     host: "127.0.0.1",
     user: "root",
-    password: "123456",
+    password: "080402",
     database: "projeto_db",
   })
   .promise();
@@ -91,7 +91,7 @@ export async function editLivro(
   estado_de_conservacao,
   localizacao_fisica,
   uri_da_capa_do_livro,
-  status_do_livro,
+  status_do_livro
 ) {
   const result = await pool.query(
     `
@@ -386,7 +386,7 @@ export async function getEmprestimo() {
 
 // Cria emprestimos
 export async function createEmprestimo(
-  id, 
+  id,
   id_do_livro,
   id_do_material,
   id_do_usuario,
@@ -413,7 +413,7 @@ export async function createEmprestimo(
       id_do_usuario,
       data_do_emprestimo,
       data_de_devolucao_prevista,
-      status_do_emprestimo
+      status_do_emprestimo,
     ]
   );
   return result;
@@ -432,7 +432,7 @@ export async function editEmprestimo(
   id_do_usuario,
   data_do_emprestimo,
   data_de_devolucao_prevista,
-  status_do_emprestimo,
+  status_do_emprestimo
 ) {
   const result = await pool.query(
     `
@@ -456,7 +456,7 @@ export async function editEmprestimo(
       data_do_emprestimo,
       data_de_devolucao_prevista,
       status_do_emprestimo,
-      id
+      id,
     ]
   );
   return result;
