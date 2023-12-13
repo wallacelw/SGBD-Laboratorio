@@ -1,22 +1,21 @@
-import jwt from "jsonwebtoken"
-import * as db from "../../database.js"
-import { promisify } from "util"
-
 export async function isAuthorized(req, res, next) {
-    var token = await req.headers.authorization.split(' ')[1];
-    console.log(token)
-    if (token) {
+    if (!req.cookies) {
+        next()
+    }
+    if (req.cookies.userSave) {
         try {
-            const { id } = await jwt.verify(token,"abcdefghijklmnopqrstuvwxyz123456")
-            console.log(id)
-            const user = await db.getUserById(id)
-            
-            if (!user) {
-                return next()
-            }
-            
-            req.user = user
-            return next();
+            const decoded = await promisify(jwt.verify)(req.cookies.userSave,
+                "abcdefghijklmnopqrstuvwxyz123456"
+            )
+
+            db.query('SELECT * FROM users WHERE id = ?', [decoded.id], (err, results) => {
+                console.log(results);
+                if (!results) {
+                    return next();
+                }
+                req.user = results[0];
+                return next();
+            })
         } catch (err) {
             console.log(err)
             return next()

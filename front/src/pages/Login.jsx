@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-axios.defaults.withCredentials = true
-
 const Login = () => {
     const [user, setUser] = useState({
         login: "",
@@ -21,11 +19,8 @@ const Login = () => {
     const handleClickLogin = async (e) => {
         e.preventDefault()
         try {
-            await axios.post("http://localhost:3333/login", user, {withCredentials: true,}).then((res) => {
-            localStorage.setItem("authLevel", res.data.authLevel);
-            localStorage.setItem("authToken", res.data.token);
-            })
-            //navigate("/Books");
+            await axios.post("http://localhost:3333/login", user)
+            navigate("/Books");
         } catch (error) {
             console.log(error)
             setError(true)
@@ -35,7 +30,7 @@ const Login = () => {
     const handleClickLogout = async (e) => {
         e.preventDefault()
         try {
-            await axios.post("http://localhost:3333/logout")
+            await axios.get("http://localhost:3333/logout")
         } catch (error) {
             console.log(error)
         }
