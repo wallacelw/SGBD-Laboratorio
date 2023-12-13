@@ -14,6 +14,7 @@ import Emprestimos from "./pages/Emprestimos";
 import AddEmprestimos from "./pages/AddEmprestimo";
 import ListarEmprestimos from "./pages/ListarEmprestimos";
 import EditarEmprestimo from "./pages/EditEmprestimo";
+import AddBookEmprestimo from "./pages/AddBookEmprestimo";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
           <Route path="/Books" element={<Books />} />
           <Route path="/Book/Add" element={<AddBook />} />
           <Route path="/Book/Edit/:isbn" element={<EditBook />} />
+          <Route
+            path="/Book/adicionar-emprestimo/:isbn"
+            element={<AddBookEmprestimo />}
+          />
 
           <Route path="/Materials" element={<Materials />} />
           <Route path="/Material/Add" element={<AddMaterial />} />
