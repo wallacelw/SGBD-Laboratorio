@@ -34,6 +34,28 @@ export async function getLivros() {
   return result;
 }
 
+export async function listAutores(isbn) {
+  const [result] = await pool.query(`
+  SELECT autor
+  FROM Livros
+  JOIN Autor
+  ON Livros.isbn = Autor.isbn
+  WHERE Livros.isbn = ${isbn}
+  `);
+  return result;
+}
+
+export async function listLivroCategorias(isbn) {
+  const [result] = await pool.query(`
+  SELECT categoria
+  FROM Livros
+  JOIN Categoria_dos_livros
+  ON Livros.isbn = Categoria_dos_livros.isbn
+  WHERE Livros.isbn = ${isbn}
+  `);
+  return result;
+}
+
 /* 
 --------------------------------
     Requests do tipo POST
@@ -172,6 +194,17 @@ export async function deleteLivro(isbn) {
 // Função que faz a query para buscar todos os materiais do DB
 export async function getMateriais() {
   const [result] = await pool.query("SELECT * FROM Materiais_Didaticos");
+  return result;
+}
+
+export async function listMaterialCategorias(id) {
+  const [result] = await pool.query(`
+  SELECT categoria
+  FROM Materiais_Didaticos
+  JOIN Categoria_dos_materiais
+  ON Materiais_Didaticos.id = Categoria_dos_materiais.id
+  WHERE Materiais_Didaticos.id = ${id}
+  `);
   return result;
 }
 

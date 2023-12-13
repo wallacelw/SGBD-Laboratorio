@@ -35,6 +35,18 @@ app.get("/livros", async (req, res) => {
   res.status(200).send(livros);
 });
 
+app.get("/autores/:isbn", async (req, res) => {
+  const isbn = req.params.isbn;
+  const autores = await db.listAutores(isbn);
+  res.status(200).send(autores);
+})
+
+app.get("/livro-categorias/:isbn", async (req, res) => {
+  const isbn = req.params.isbn;
+  const categorias = await db.listLivroCategorias(isbn);
+  res.status(200).send(categorias);
+})
+
 /* 
 --------------------------------
     Requests do tipo POST
@@ -125,6 +137,12 @@ app.get("/materiais", async (req, res) => {
   const materiais = await db.getMateriais();
   res.status(200).send(materiais);
 });
+
+app.get("/material-categorias/:isbn", async (req, res) => {
+  const id = req.params.id;
+  const categorias = await db.listMaterialCategorias(id);
+  res.status(200).send(categorias);
+})
 
 /* 
 --------------------------------
@@ -398,8 +416,6 @@ app.put("/status", async (req, res) => {
     data_de_devolucao_prevista,
     status_do_emprestimo
   } = req.body;
-
-  console.log(req.body);
 
   if (id_do_livro) {
     await db.editLivroStatus(id_do_livro, "disponivel");
