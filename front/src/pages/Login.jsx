@@ -19,7 +19,10 @@ const Login = () => {
   const handleClickLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3333/login", user);
+      await axios.post("http://localhost:3333/login", user, {withCredentials: true,}).then((res) => {
+        localStorage.setItem("authLevel", res.data.authLevel);
+        localStorage.setItem("authToken", res.data.token);
+      })
       navigate("/Books");
     } catch (error) {
       console.log(error);

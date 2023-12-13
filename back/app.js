@@ -3,7 +3,8 @@ import * as db from "./database.js";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import cookieParser from "cookie-parser";
-//import { isAuthorized } from "./app/middleware/auth.js";
+import jwt from "jsonwebtoken"
+import { isAuthorized } from "./app/middleware/auth.js";
 
 /*
     Aqui ficarão as funções da API, responsáveis por receber algum pedido e
@@ -13,7 +14,14 @@ import cookieParser from "cookie-parser";
 
 // Inicializa o express e habilita o cors para permitir troca de dados em um mesmo localhost com diferentes portas
 const app = express();
-app.use(cors());
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,
+    access_control_allow_credentials:true,
+    optionSuccessStatus:200
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -240,20 +248,30 @@ app.get("/usuarios", async (req, res) => {
 --------------------------------
 */
 
-app.post("/register", async (req, res) => {
-  const { id, nome, sobrenome, funcao, login, senha, uri_da_foto_do_usuario } =
-    req.body;
-  const usuario = await db.createUser(
-    id,
-    nome,
-    sobrenome,
-    funcao,
-    login,
-    senha,
-    uri_da_foto_do_usuario
-  );
-  res.status(201).send(usuario);
-});
+app.post("/register", isAuthorized, async (req, res) => {
+    const {id,
+           nome,
+           sobrenome,
+           funcao,
+           login,
+           senha,
+           uri_da_foto_do_usuario} = req.body;
+    // Essa parte abaixo lida com a autenticação, checando se o usuário logado é de fato um adm.
+    const user = await req.user
+    if (!user || user[0].funcao != "administrador") {
+        console.log(user)
+        return res.status(401).send("Somente administradores podem criar novos usuários.")
+    }
+
+    const users = await db.getUserByLogin(login)
+    if (users.length > 0) {
+        return res.status(409).send("Login já está em uso!")
+    }
+
+    let hashedPassword = await bcrypt.hash(senha, 8)
+    const result = db.createUser(id, nome, sobrenome, funcao, login, hashedPassword, uri_da_foto_do_usuario)
+    res.status(201).send(result)
+})
 
 /* 
 --------------------------------
@@ -295,31 +313,41 @@ app.delete("/usuario/:id", async (req, res) => {
 ----------------------------------------------------------------
 */
 
-// app.post("/login", async (req, res) => {
-//   const { login, senha } = req.body;
-//   const users = await db.getUserByLogin(login);
-//   if (!users || !(await bcrypt.compare(senha, users[0].senha))) {
-//     res.status(401).send("Login ou senha inválidos.");
-//   }
-//   const id = users[0].id;
-//   const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
-//     expiresIn: 90,
-//   });
-//   const cookieOptions = {
-//     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-//     httpOnly: true,
-//   };
-//   res.cookie("userSave", token, cookieOptions);
-//   res.status(200);
-// });
+app.post("/login", async (req, res) => {
+    let authLevel = 0
 
-// app.get("/logout", (req, res) => {
-//   res.cookie("userSave", "logout", {
-//     expires: new Date(Date.now() + 2 * 1000),
-//     httpOnly: true,
-//   });
-//   res.status(200);
-// });
+    const {login, senha} = req.body
+    const [user] = await db.getUserByLogin(login)
+
+    if (!user || !await bcrypt.compare(senha, user.senha)) {
+        return res.status(401).send("Login ou senha errados!")
+    }
+    const id = user.id
+    const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
+        expiresIn: '48h'
+    });
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() + 90 * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+    }
+    res.cookie('userSave', token, cookieOptions);
+    if (user.funcao == 'administrador') {
+        authLevel = 2
+    } else {
+        authLevel = 1
+    }
+    res.status(200).send({authLevel, token})
+})
+
+app.get("/logout", (req, res) => {
+  res.cookie("userSave", "logout", {
+    expires: new Date(Date.now() + 2 * 1000),
+    httpOnly: true,
+  });
+  res.status(200);
+});
 
 /* 
 ----------------------------------------------------------------
