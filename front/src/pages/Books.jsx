@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 function ListarLivros() {
@@ -10,6 +11,15 @@ function ListarLivros() {
 
   const handleEdit = (isbn) => {
     navigate(`/adicionar-emprestimo/${isbn}`);
+  };
+
+  const handleDelete = async (isbn) => {
+    try {
+      await axios.delete(`http://localhost:3333/livro/${isbn}`);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -78,6 +88,21 @@ function ListarLivros() {
               <td>
                 <button onClick={() => handleEdit(livro.isbn)}>
                   Solicitar emprestimo
+                </button>
+              </td>
+              <td>
+                <button
+                  className="delete"
+                  onClick={() => handleDelete(livro.isbn)}
+                >
+                  {" "}
+                  Apagar{" "}
+                </button>
+              </td>
+              <td>
+                <button className="edit">
+                  {" "}
+                  <Link to={`/Book/Edit/${livro.isbn}`}> Editar </Link>{" "}
                 </button>
               </td>
             </tr>
