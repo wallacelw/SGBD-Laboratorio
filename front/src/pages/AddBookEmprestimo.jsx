@@ -35,12 +35,12 @@ const AddBookEmprestimo = () => {
 
     return (
         <div className="form">
-            <h1 className="title"> Atualizar o livro </h1>
+            <h1 className="title"> Solicite o Emprestimo </h1>
             <input className="box_input" type="number" placeholder="ID do Emprestimo" onChange={handleChange} name="id"/>
             <input className="box_input" type="number" placeholder="ID do Usuario" onChange={handleChange} name="id_do_usuario"/>
             <input className="box_input" type="date" placeholder="Data do Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
             <input className="box_input" type="date" placeholder="Data da Devolução Prevista" onChange={handleChange} name="data_de_devolucao_prevista"/>
-            <button onClick={handleClick}> Editar </button>
+            <button onClick={handleClick}> Solicitar </button>
             {error && "Algo deu errado!"}
             <Link className="hyperlink" to="/Books"> Voltar para a Página de Livros </Link>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Emprestimos() {
   const [emprestimos, setEmprestimos] = useState([]);
@@ -8,8 +9,22 @@ function Emprestimos() {
   const [emprestimosFiltrados, setEmprestimosFiltrados] = useState([]);
   const navigate = useNavigate();
 
-  const handleEdit = (emprestimo) => {
+  const handleEdit = async (emprestimo) => {
     navigate(`/Edit-Emprestimo/${emprestimo.id}/${emprestimo.id_do_livro}/${emprestimo.id_do_material}/${emprestimo.id_do_usuario}`);
+  };
+
+  const handleReturn = async (emprestimo) => {
+    await axios.put("http://localhost:3333/status/", emprestimo);
+    window.location.reload();
+  };
+
+  const handleDelete = async (emprestimo) => {
+    try {
+      await axios.delete(`http://localhost:3333/emprestimo/${emprestimo.id}`);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -85,10 +100,17 @@ function Emprestimos() {
               <td>
                 <button onClick={() => handleEdit(emprestimo)}>Editar</button>
               </td>
+              <td>
+                <button onClick={() => handleReturn(emprestimo)}>Devolver</button>
+              </td>
+              <td>
+                <button onClick={() => handleDelete(emprestimo)}>Apagar</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <button className="button_redirect" ><Link to="/"> Voltar para página inicial </Link></button>
     </div>
   );
 }

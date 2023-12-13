@@ -123,6 +123,23 @@ export async function editLivro(
   return result;
 }
 
+export async function editLivroStatus(isbn, status_do_livro) {
+  const result = await pool.query(
+    `
+    UPDATE Livros
+    SET 
+      status_do_livro = ?
+    WHERE
+      isbn = ?;
+    `,
+    [
+      status_do_livro,
+      isbn,
+    ]
+  );
+  return result;
+}
+
 /* 
 --------------------------------
     Requests do tipo DELETE
@@ -240,6 +257,23 @@ export async function editMaterial(
       estado_de_conservacao,
       localizacao_fisica,
       uri_da_foto_do_material,
+      status_do_material,
+      id,
+    ]
+  );
+  return result;
+}
+
+export async function editMaterialStatus(id, status_do_material) {
+  const result = await pool.query(
+    `
+    UPDATE Materiais_Didaticos
+    SET 
+    status_do_material = ?
+    WHERE
+        id = ?;
+    `,
+    [
       status_do_material,
       id,
     ]
@@ -456,6 +490,23 @@ export async function editEmprestimo(
       data_do_emprestimo,
       data_de_devolucao_prevista,
       status_do_emprestimo,
+      id,
+    ]
+  );
+  return result;
+}
+
+export async function editEmprestimoStatus(id) {
+  const result = await pool.query(
+    `
+    UPDATE Emprestimos
+    SET 
+        status_do_emprestimo = ?
+    WHERE
+        id = ?;
+    `,
+    [
+      "devolvido",
       id,
     ]
   );

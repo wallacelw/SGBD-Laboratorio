@@ -338,6 +338,14 @@ app.post("/emprestimo", async (req, res) => {
     data_de_devolucao_prevista,
     status_do_emprestimo,
   } = req.body;
+
+  if (id_do_livro) {
+    await db.editLivroStatus(id_do_livro, "nao_disponivel");
+  }
+  else {
+    await db.editMaterialStatus(id_do_material, "nao_disponivel");
+  }
+
   const emprestimo = await db.createEmprestimo(
     id, 
     id_do_livro,
@@ -356,7 +364,7 @@ app.post("/emprestimo", async (req, res) => {
 --------------------------------
 */
 
-app.put("/emprestimo/", async (req, res) => {
+app.put("/emprestimo", async (req, res) => {
     const {
         id,
         id_do_livro,
@@ -378,7 +386,33 @@ app.put("/emprestimo/", async (req, res) => {
     );
     res.status(200).send(emprestimo);
   });
-  
+
+// For updating status to "devolvido"
+app.put("/status", async (req, res) => {
+  const {
+    id,
+    id_do_livro,
+    id_do_material,
+    id_do_usuario,
+    data_do_emprestimo,
+    data_de_devolucao_prevista,
+    status_do_emprestimo
+  } = req.body;
+
+  console.log(req.body);
+
+  if (id_do_livro) {
+    await db.editLivroStatus(id_do_livro, "disponivel");
+  }
+  else {
+    await db.editMaterialStatus(id_do_material, "disponivel");
+  }
+
+  const result = await db.editEmprestimoStatus(id);
+
+  res.status(200).send(result);
+});
+
   /* 
   --------------------------------
       Requests do tipo DELETE
@@ -387,7 +421,7 @@ app.put("/emprestimo/", async (req, res) => {
   
   app.delete("/emprestimo/:id", async (req, res) => {
     const id = req.params.id;
-    const emprestimo = await db.deleteUser(id);
+    const emprestimo = await db.deleteEmprestimo(id);
     res.status(200).send(emprestimo);
   });
 

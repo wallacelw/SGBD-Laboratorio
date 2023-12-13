@@ -26,8 +26,6 @@ const EditEmprestimo = () => {
         setLoan((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    console.log(loan)
-
     const handleClick = async (e) => {
         e.preventDefault();
         try {
