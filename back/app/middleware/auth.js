@@ -12,16 +12,22 @@ export async function isAuthorized(req, res, next) {
             const user = await db.getUserById(id)
 
             if (!user) {
-                return next()
+                return res.status(401).send("Nenhum usuário corresponde ao token fornecido.")
             }
 
-            req.user = user
+            if (user[0].funcao != "administrador") {
+                console.log(user)
+                return res.status(401).send("Somente administradores podem realizar essa função.")
+            }
+
             return next();
         } catch (err) {
             console.log(err)
-            return next()
+            return res.status(500).send(err)
         }
     } else {
+        res.status(401).send("Usuário não está logado!")
         next();
     }
+
 }

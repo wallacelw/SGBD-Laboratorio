@@ -62,7 +62,7 @@ app.get("/livro-categorias/:isbn", async (req, res) => {
 */
 
 // POST Livro. Cria um Livro novo na base de dados de acordo com as informações passadas
-app.post("/livro", async (req, res) => {
+app.post("/livro", isAuthorized, async (req, res) => {
   const {
     isbn,
     titulo,
@@ -92,7 +92,7 @@ app.post("/livro", async (req, res) => {
 --------------------------------
 */
 
-app.put("/livro/:isbn", async (req, res) => {
+app.put("/livro/:isbn", isAuthorized, async (req, res) => {
   const isbn = req.params.isbn;
   const {
     titulo,
@@ -122,7 +122,7 @@ app.put("/livro/:isbn", async (req, res) => {
 --------------------------------
 */
 
-app.delete("/livro/:isbn", async (req, res) => {
+app.delete("/livro/:isbn", isAuthorized, async (req, res) => {
   const isbn = req.params.isbn;
   const livro = await db.deleteLivro(isbn);
   res.status(200).send(livro);
@@ -159,7 +159,7 @@ app.get("/material-categorias/:isbn", async (req, res) => {
 */
 
 // POST Materiais. Cria um Materiais novo na base de dados de acordo com as informações passadas
-app.post("/material", async (req, res) => {
+app.post("/material", isAuthorized, async (req, res) => {
   const {
     id,
     descricao,
@@ -189,7 +189,7 @@ app.post("/material", async (req, res) => {
 --------------------------------
 */
 
-app.put("/material/:id", async (req, res) => {
+app.put("/material/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const {
     descricao,
@@ -219,7 +219,7 @@ app.put("/material/:id", async (req, res) => {
 --------------------------------
 */
 
-app.delete("/material/:id", async (req, res) => {
+app.delete("/material/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const material = await db.deleteMaterial(id);
   res.status(200).send(material);
@@ -256,13 +256,6 @@ app.post("/register", isAuthorized, async (req, res) => {
            login,
            senha,
            uri_da_foto_do_usuario} = req.body;
-    // Essa parte abaixo lida com a autenticação, checando se o usuário logado é de fato um adm.
-    const user = await req.user
-    if (!user || user[0].funcao != "administrador") {
-        console.log(user)
-        return res.status(401).send("Somente administradores podem criar novos usuários.")
-    }
-
     const users = await db.getUserByLogin(login)
     if (users.length > 0) {
         return res.status(409).send("Login já está em uso!")
@@ -279,7 +272,7 @@ app.post("/register", isAuthorized, async (req, res) => {
 --------------------------------
 */
 
-app.put("/usuario/:id", async (req, res) => {
+app.put("/usuario/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const { nome, sobrenome, funcao, login, senha, uri_da_foto_do_usuario } =
     req.body;
@@ -301,7 +294,7 @@ app.put("/usuario/:id", async (req, res) => {
 --------------------------------
 */
 
-app.delete("/usuario/:id", async (req, res) => {
+app.delete("/usuario/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const usuario = await db.deleteUser(id);
   res.status(200).send(usuario);
@@ -385,6 +378,10 @@ app.post("/emprestimo", async (req, res) => {
     status_do_emprestimo,
   } = req.body;
 
+  if (status_do_emprestimo != "solicitado") {
+    res.status(400).send("Empréstimos criados podem apenas ser solicitados e após isso aprovados por um administrador.")
+  }
+
   if (id_do_livro) {
     await db.editLivroStatus(id_do_livro, "nao_disponivel");
   }
@@ -410,7 +407,7 @@ app.post("/emprestimo", async (req, res) => {
 --------------------------------
 */
 
-app.put("/emprestimo", async (req, res) => {
+app.put("/emprestimo", isAuthorized, async (req, res) => {
     const {
         id,
         id_do_livro,
@@ -434,7 +431,7 @@ app.put("/emprestimo", async (req, res) => {
   });
 
 // For updating status to "devolvido"
-app.put("/status", async (req, res) => {
+app.put("/status", isAuthorized, async (req, res) => {
   const {
     id,
     id_do_livro,
@@ -463,7 +460,7 @@ app.put("/status", async (req, res) => {
   --------------------------------
   */
   
-  app.delete("/emprestimo/:id", async (req, res) => {
+  app.delete("/emprestimo/:id", isAuthorized, async (req, res) => {
     const id = req.params.id;
     const emprestimo = await db.deleteEmprestimo(id);
     res.status(200).send(emprestimo);
