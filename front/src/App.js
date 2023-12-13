@@ -11,9 +11,11 @@ import Register from "./pages/Register";
 import Users from "./pages/Users";
 import EditUser from "./pages/EditUser";
 import Emprestimos from "./pages/Emprestimos";
-import AddEmprestimos from "./pages/AddEmprestimo";
+import AddEmprestimos from "./pages/AddBookEmprestimo";
 import ListarEmprestimos from "./pages/ListarEmprestimos";
 import EditarEmprestimo from "./pages/EditEmprestimo";
+import AddBookEmprestimo from "./pages/AddBookEmprestimo";
+import AddMaterialEmprestimo from "./pages/AddMaterialEmprestimo";
 
 function App() {
   return (
@@ -29,9 +31,19 @@ function App() {
           <Route path="/Book/Add" element={<AddBook />} />
           <Route path="/Book/Edit/:isbn" element={<EditBook />} />
 
+          <Route
+            path="/Book/Add-emprestimo/:isbn"
+            element={<AddBookEmprestimo />}
+          />
+
           <Route path="/Materials" element={<Materials />} />
           <Route path="/Material/Add" element={<AddMaterial />} />
           <Route path="/Material/Edit/:id" element={<EditMaterial />} />
+
+          <Route
+            path="/Materials/Add-emprestimo/:id"
+            element={<AddMaterialEmprestimo />}
+          />
 
           <Route path="/Emprestimos" element={<Emprestimos />} />
           <Route path="/Emprestimo/Add" element={<AddEmprestimos />} />
