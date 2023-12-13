@@ -26,19 +26,32 @@ function ListarLivros() {
     fetch("http://localhost:3333/livros")
       .then((response) => response.json())
       .then((data) => {
-        setLivros(data);
-        setLivrosFiltrados(data);
+        const formattedData = data.map((livro) => {
+          return {
+            ...livro,
+            data_de_aquisicao: new Date(
+              livro.data_de_aquisicao
+            ).toLocaleDateString("pt-BR"),
+          };
+        });
+        setLivros(formattedData);
+        setLivrosFiltrados(formattedData);
       })
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []);
 
   useEffect(() => {
-    const resultadosFiltrados = livros.filter((livro) => {
-      return livro[filtro]
-        ?.toString()
-        .toLowerCase()
-        .includes(palavraChave.toLowerCase());
-    });
+    let resultadosFiltrados;
+    if (filtro === "") {
+      resultadosFiltrados = [...livros];
+    } else {
+      resultadosFiltrados = livros.filter((livro) => {
+        return livro[filtro]
+          ?.toString()
+          .toLowerCase()
+          .includes(palavraChave.toLowerCase());
+      });
+    }
     setLivrosFiltrados(resultadosFiltrados);
   }, [palavraChave, filtro, livros]);
 
@@ -50,9 +63,11 @@ function ListarLivros() {
           <option value="">Selecione um atributo</option>
           <option value="titulo">Título</option>
           <option value="descricao">Descrição</option>
+          <option value="categorias">Categorias</option>
           <option value="data_de_aquisicao">Data de Aquisição</option>
           <option value="estado_de_conservacao">Estado de Conservação</option>
           <option value="localizacao_fisica">Localização Física</option>
+          <option value="status_do_livro">Status do Livro</option>
         </select>
         <input
           type="text"
@@ -67,9 +82,11 @@ function ListarLivros() {
             <th>ISBN</th>
             <th>Título</th>
             <th>Descrição</th>
+            <th>Categorias</th>
             <th>Data de Aquisição</th>
             <th>Estado de Conservação</th>
             <th>Localização Física</th>
+            <th>Status do Livro</th>
             <th>Capa</th>
           </tr>
         </thead>
@@ -79,11 +96,21 @@ function ListarLivros() {
               <td>{livro.isbn}</td>
               <td>{livro.titulo}</td>
               <td>{livro.descricao}</td>
+              <td>[]</td>
               <td>{livro.data_de_aquisicao}</td>
               <td>{livro.estado_de_conservacao}</td>
               <td>{livro.localizacao_fisica}</td>
+              <td>{livro.status_do_livro}</td>
               <td>
-                <img src={livro.uri_da_capa_do_livro} alt="Capa do Livro" />
+                {livro.uri_da_capa_do_livro ? (
+                  <img
+                    src={livro.uri_da_capa_do_livro}
+                    alt="Capa do livro "
+                    style={{ maxWidth: "100px", maxHeight: "100px" }}
+                  />
+                ) : (
+                  <span>Sem imagem</span>
+                )}
               </td>
               <td>
                 <button onClick={() => handleEdit(livro.isbn)}>
