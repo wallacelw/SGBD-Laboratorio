@@ -10,9 +10,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Users from "./pages/Users";
 import EditUser from "./pages/EditUser";
-import AddEmprestimos from "./pages/AddBookEmprestimo";
 import ListarEmprestimos from "./pages/ListarEmprestimos";
-import EditarEmprestimo from "./pages/EditEmprestimo";
+import EditEmprestimo from "./pages/EditEmprestimo";
 import AddBookEmprestimo from "./pages/AddBookEmprestimo";
 import AddMaterialEmprestimo from "./pages/AddMaterialEmprestimo";
 
@@ -44,9 +43,9 @@ function App() {
             element={<AddMaterialEmprestimo />}
           />
 
-          <Route path="/Emprestimo/Add" element={<AddEmprestimos />} />
+          {/* <Route path="/Emprestimo/Add" element={<AddEmprestimos />} /> */}
           <Route path="/Emprestimo/Search" element={<ListarEmprestimos />} />
-          <Route path="/editar-emprestimo/:id" element={<EditarEmprestimo />} />
+          <Route path="/Edit-Emprestimo/:id/:idlivro/:idmaterial/:idusuario" element={<EditEmprestimo />} />
         </Routes>
       </BrowserRouter>
     </div>

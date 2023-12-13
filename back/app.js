@@ -356,9 +356,9 @@ app.post("/emprestimo", async (req, res) => {
 --------------------------------
 */
 
-app.put("/emprestimo/:id", async (req, res) => {
-    const id = req.params.id;
+app.put("/emprestimo/", async (req, res) => {
     const {
+        id,
         id_do_livro,
         id_do_material,
         id_do_usuario,
@@ -367,7 +367,7 @@ app.put("/emprestimo/:id", async (req, res) => {
         status_do_emprestimo
     } = req.body;
 
-    const emprestimos = await db.editEmprestimo(
+    const emprestimo = await db.editEmprestimo(
         id,
         id_do_livro,
         id_do_material,
@@ -376,7 +376,7 @@ app.put("/emprestimo/:id", async (req, res) => {
         data_de_devolucao_prevista,
         status_do_emprestimo
     );
-    res.status(200).send(emprestimos);
+    res.status(200).send(emprestimo);
   });
   
   /* 

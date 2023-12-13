@@ -436,7 +436,7 @@ export async function editEmprestimo(
 ) {
   const result = await pool.query(
     `
-    UPDATE Usuarios
+    UPDATE Emprestimos
     SET 
         id = ?,
         id_do_livro = ?,

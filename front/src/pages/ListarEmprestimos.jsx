@@ -9,11 +9,7 @@ function Emprestimos() {
   const navigate = useNavigate();
 
   const handleEdit = (emprestimo) => {
-    if (emprestimo.id_do_livro) {
-      navigate(`/editar-emprestimo/livro/${emprestimo.id_do_livro}`);
-    } else if (emprestimo.id_do_material) {
-      navigate(`/editar-emprestimo/material/${emprestimo.id_do_material}`);
-    }
+    navigate(`/Edit-Emprestimo/${emprestimo.id}/${emprestimo.id_do_livro}/${emprestimo.id_do_material}/${emprestimo.id_do_usuario}`);
   };
 
   useEffect(() => {
@@ -47,6 +43,7 @@ function Emprestimos() {
       <div>
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
+          <option value="id">ID do Emprestimo</option>
           <option value="id_do_livro">ID do Livro</option>
           <option value="id_do_material">ID do Material</option>
           <option value="id_do_usuario">ID do Usuário</option>
@@ -66,6 +63,7 @@ function Emprestimos() {
       <table>
         <thead>
           <tr>
+            <th>ID do Emprestimo</th>
             <th>ID do Livro</th>
             <th>ID do Material</th>
             <th>ID do Usuário</th>
@@ -77,6 +75,7 @@ function Emprestimos() {
         <tbody>
           {emprestimosFiltrados.map((emprestimo, index) => (
             <tr key={index}>
+              <td>{emprestimo.id}</td>
               <td>{emprestimo.id_do_livro}</td>
               <td>{emprestimo.id_do_material}</td>
               <td>{emprestimo.id_do_usuario}</td>

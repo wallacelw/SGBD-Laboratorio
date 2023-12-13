@@ -125,7 +125,7 @@ values
 	"2023-10-12",
 	"Quase destruido",
 	"Escondido",
-	"'https://papelarianobel.com.br/wp-content/uploads/2021/09/Destrua-Este-Diario-1.jpg'",
+	"https://papelarianobel.com.br/wp-content/uploads/2021/09/Destrua-Este-Diario-1.jpg",
 	"disponivel")
 ;
 insert into Categoria_dos_Livros (
