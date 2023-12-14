@@ -12,7 +12,7 @@ const AddBookEmprestimo = () => {
     const [error,setError] = useState(false);
 
     const [loan, setLoan] = useState({
-        id: uuidv4(),
+        id: Math.random() * (200000 - 1) + 1,
         id_do_livro: bookIsbn,
         id_do_material: null,
         id_do_usuario: localStorage.getItem("userId"),
