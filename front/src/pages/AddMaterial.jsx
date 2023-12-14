@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { headers } from "../utils/utils";
 import { toast } from "react-toastify";
+import {v4 as uuidv4} from 'uuid';
 
 const AddMaterial = () => {
   const [material, setMaterial] = useState({
-    id: null,
+    id: uuidv4(),
     descricao: "",
     numero_de_serie: null,
     data_de_aquisicao: null,
@@ -42,13 +43,6 @@ const AddMaterial = () => {
   return (
     <div className="form">
       <h1 className="title"> Adicionar novo material </h1>
-      <input
-        className="box_input"
-        type="number"
-        placeholder="ID"
-        onChange={handleChange}
-        name="id"
-      />
       <input
         className="box_input"
         type="text"

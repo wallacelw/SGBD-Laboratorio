@@ -34,6 +34,7 @@ const Login = () => {
       await axios.post("http://localhost:3333/login", user, {withCredentials: true,}).then((res) => {
         localStorage.setItem("authLevel", res.data.authLevel);
         localStorage.setItem("authToken", res.data.token);
+        localStorage.setItem("userId", res.data.id);
         axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("authToken");
         setIsLogged(true);
         setIsAdmin(res.data.authLevel == 2);

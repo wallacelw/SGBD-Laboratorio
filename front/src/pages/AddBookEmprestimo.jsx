@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { headers } from "../utils/utils";
 import { toast } from "react-toastify";
+import {v4 as uuidv4} from 'uuid';
 
 const AddBookEmprestimo = () => {
     const location = useLocation();
@@ -11,10 +12,10 @@ const AddBookEmprestimo = () => {
     const [error,setError] = useState(false);
 
     const [loan, setLoan] = useState({
-        id: null,
+        id: uuidv4(),
         id_do_livro: bookIsbn,
         id_do_material: null,
-        id_do_usuario: null,
+        id_do_usuario: localStorage.getItem("userId"),
         data_do_emprestimo: null,
         data_de_devolucao_prevista: null,
         status_do_emprestimo: "solicitado"
@@ -40,8 +41,6 @@ const AddBookEmprestimo = () => {
     return (
         <div className="form">
             <h1 className="title"> Solicite o Emprestimo </h1>
-            <input className="box_input" type="number" placeholder="ID do Emprestimo" onChange={handleChange} name="id"/>
-            <input className="box_input" type="number" placeholder="ID do Usuario" onChange={handleChange} name="id_do_usuario"/>
             <input className="box_input" type="date" placeholder="Data do Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
             <input className="box_input" type="date" placeholder="Data da Devolução Prevista" onChange={handleChange} name="data_de_devolucao_prevista"/>
             <button onClick={handleClick}> Solicitar </button>

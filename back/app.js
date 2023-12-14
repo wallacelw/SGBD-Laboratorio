@@ -325,20 +325,13 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ id }, "abcdefghijklmnopqrstuvwxyz123456", {
         expiresIn: '48h'
     });
-    const cookieOptions = {
-        expires: new Date(
-            Date.now() + 90 * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true,
-    }
-    res.cookie('userSave', token, cookieOptions);
     if (user.funcao == 'administrador') {
         authLevel = 2
     } else {
         authLevel = 1
     }
     let message = "Login realizado com sucesso!"
-    res.status(200).send({authLevel, token, message})
+    res.status(200).send({authLevel, token, message, id})
 })
 
 app.get("/logout", (req, res) => {
