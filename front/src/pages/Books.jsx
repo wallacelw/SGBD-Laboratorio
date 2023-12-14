@@ -11,41 +11,63 @@ function ListarLivros() {
   const [livrosFiltrados, setLivrosFiltrados] = useState([]);
   const navigate = useNavigate();
 
-  const [isAdmin, setIsAdmin] = useState(false)
-  useEffect(() => {
-    const authLevel = localStorage.getItem("authLevel");
-    setIsAdmin(authLevel == 2); // Setta admin como um booleano guardando o dado se o usuário atual é admin ou não
-  }, [isAdmin])
-
   const handleEdit = (isbn) => {
     navigate(`/Book/Add-emprestimo/${isbn}`);
   };
 
   const handleDelete = async (isbn) => {
     try {
-      await axios.delete(`http://localhost:3333/livro/${isbn}`, {headers: headers}).then(
-        (res) => toast(res.data.message)
-    );
+      await axios
+        .delete(`http://localhost:3333/livro/${isbn}`, { headers: headers })
+        .then((res) => toast(res.data.message));
       window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
+  const fetchCategoriasLivro = async (isbn) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3333/livro-categorias/${isbn}`
+      );
+      return response.data; // assumindo que a API retorna uma lista de categorias
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      return []; // retorna uma lista vazia em caso de erro
+    }
+  };
+
+  const fetchAutoresLivro = async (isbn) => {
+    try {
+      const response = await axios.get(`http://localhost:3333/autores/${isbn}`);
+      return response.data; // assumindo que a API retorna uma lista de autores
+    } catch (error) {
+      console.error("Erro ao buscar autores:", error);
+      return []; // retorna uma lista vazia em caso de erro
+    }
+  };
+
   useEffect(() => {
     fetch("http://localhost:3333/livros")
       .then((response) => response.json())
-      .then((data) => {
-        const formattedData = data.map((livro) => {
-          return {
-            ...livro,
-            data_de_aquisicao: new Date(
-              livro.data_de_aquisicao
-            ).toLocaleDateString("pt-BR"),
-          };
-        });
-        setLivros(formattedData);
-        setLivrosFiltrados(formattedData);
+      .then(async (data) => {
+        const livrosComCategoriasEAutores = await Promise.all(
+          data.map(async (livro) => {
+            const categorias = await fetchCategoriasLivro(livro.isbn);
+            const autores = await fetchAutoresLivro(livro.isbn);
+            return {
+              ...livro,
+              categorias,
+              autores,
+              data_de_aquisicao: new Date(
+                livro.data_de_aquisicao
+              ).toLocaleDateString("pt-BR"),
+            };
+          })
+        );
+        setLivros(livrosComCategoriasEAutores);
+        setLivrosFiltrados(livrosComCategoriasEAutores);
       })
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []);
@@ -67,12 +89,13 @@ function ListarLivros() {
 
   return (
     <div>
-      <h1 className="title">Lista de Livros</h1>
-      <div className="box_input">
+      <h1>Lista de Livros</h1>
+      <div>
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
           <option value="titulo">Título</option>
           <option value="descricao">Descrição</option>
+          <option value="autores">Autores</option>
           <option value="categorias">Categorias</option>
           <option value="data_de_aquisicao">Data de Aquisição</option>
           <option value="estado_de_conservacao">Estado de Conservação</option>
@@ -86,31 +109,47 @@ function ListarLivros() {
           onChange={(e) => setPalavraChave(e.target.value)}
         />
       </div>
-      <table className="tabela">
+      <table>
         <thead>
           <tr>
-            <th className="tabela">ISBN</th>
-            <th className="tabela">Título</th>
-            <th className="tabela">Descrição</th>
-            <th className="tabela">Categorias</th>
-            <th className="tabela">Data de Aquisição</th>
-            <th className="tabela">Estado de Conservação</th>
-            <th className="tabela">Localização Física</th>
-            <th className="tabela">Status do Livro</th>
-            <th className="tabela">Capa</th>
+            <th>ISBN</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Autores</th>
+            <th>Categorias</th>
+            <th>Data de Aquisição</th>
+            <th>Estado de Conservação</th>
+            <th>Localização Física</th>
+            <th>Status do Livro</th>
+            <th>Capa</th>
           </tr>
         </thead>
         <tbody>
           {livrosFiltrados.map((livro, index) => (
-            <tr className="tabela" key={index}>
-              <td className="tabela">{livro.isbn}</td>
-              <td className="tabela">{livro.titulo}</td>
-              <td className="tabela">{livro.descricao}</td>
-              <td className="tabela">[]</td>
-              <td className="tabela">{livro.data_de_aquisicao}</td>
-              <td className="tabela">{livro.estado_de_conservacao}</td>
-              <td className="tabela">{livro.localizacao_fisica}</td>
-              <td className="tabela">{livro.status_do_livro}</td>
+            <tr key={index}>
+              <td>{livro.isbn}</td>
+              <td>{livro.titulo}</td>
+              <td>{livro.descricao}</td>
+              <td>
+                {livro.autores.map((autor, idx) => (
+                  <span key={idx}>
+                    {autor.autor}
+                    {idx < livro.autores.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </td>
+              <td>
+                {livro.categorias.map((categoria, idx) => (
+                  <span key={idx}>
+                    {categoria.categoria}
+                    {idx < livro.categorias.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </td>
+              <td>{livro.data_de_aquisicao}</td>
+              <td>{livro.estado_de_conservacao}</td>
+              <td>{livro.localizacao_fisica}</td>
+              <td>{livro.status_do_livro}</td>
               <td>
                 {livro.uri_da_capa_do_livro ? (
                   <img
@@ -123,17 +162,15 @@ function ListarLivros() {
                 )}
               </td>
               <td>
-                <button className="linha" onClick={() => handleEdit(livro.isbn)}>
+                <button onClick={() => handleEdit(livro.isbn)}>
                   Solicitar emprestimo
                 </button>
               </td>
-              { isAdmin? 
-              <>
               <td>
                 <button
                   className="delete"
                   onClick={() => handleDelete(livro.isbn)}
-                  >
+                >
                   {" "}
                   Apagar{" "}
                 </button>
@@ -144,17 +181,13 @@ function ListarLivros() {
                   <Link to={`/Book/Edit/${livro.isbn}`}> Editar </Link>{" "}
                 </button>
               </td>
-              </>
-              : null }
             </tr>
           ))}
         </tbody>
       </table>
-      { isAdmin? 
-      <button className="button_redirect" visible={false}>
-         <Link to="/Book/Add"> Adicionar novo livro </Link> 
-      </button> 
-      : null}
+      <button className="button_redirect">
+        <Link to="/Book/Add"> Adicionar novo livro </Link>
+      </button>
       <button className="button_redirect">
         <Link to="/"> Voltar para página inicial </Link>
       </button>
