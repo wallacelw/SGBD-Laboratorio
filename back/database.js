@@ -71,10 +71,12 @@ export async function createLivro(
   estado_de_conservacao,
   localizacao_fisica,
   uri_da_capa_do_livro,
-  status_do_livro
+  status_do_livro,
+  categorias,
+  autores
 ) {
   try {
-    const result = await pool.query(
+    await pool.query(
       `
       INSERT INTO Livros (isbn,
                           titulo,
@@ -97,12 +99,30 @@ export async function createLivro(
         status_do_livro,
       ]
     );
+
+    for (const categoria of categorias) {
+      await pool.query(
+        `
+        INSERT INTO Categoria_dos_Livros (isbn, categoria)
+        VALUES (?, ?)
+        `,
+        [isbn, categoria]
+      );
+    }
+
+    for (const autor of autores) {
+      await pool.query(
+        `
+        INSERT INTO Autor (isbn, autor)
+        VALUES (?, ?)
+        `,
+        [isbn, autor]
+      );
+    }
   } catch (err) {
     throw err;
   }
-  return result;
 }
-
 /* 
 --------------------------------
     Requests do tipo PUT
@@ -117,36 +137,88 @@ export async function editLivro(
   estado_de_conservacao,
   localizacao_fisica,
   uri_da_capa_do_livro,
-  status_do_livro
+  status_do_livro,
+  categorias,
+  autores
 ) {
-  const result = await pool.query(
-    `
-    UPDATE Livros
-    SET 
-        isbn = ?,
-        titulo = ?,
-        descricao = ?,
-        data_de_aquisicao = ?,
-        estado_de_conservacao = ?,
-        localizacao_fisica = ?,
-        uri_da_capa_do_livro = ?,
-        status_do_livro = ?
-    WHERE
-        isbn = ?;
-    `,
-    [
-      isbn,
-      titulo,
-      descricao,
-      data_de_aquisicao,
-      estado_de_conservacao,
-      localizacao_fisica,
-      uri_da_capa_do_livro,
-      status_do_livro,
-      isbn,
-    ]
-  );
-  return result;
+
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    await connection.query(
+      `
+      UPDATE Livros
+      SET 
+          titulo = ?,
+          descricao = ?,
+          data_de_aquisicao = ?,
+          estado_de_conservacao = ?,
+          localizacao_fisica = ?,
+          uri_da_capa_do_livro = ?,
+          status_do_livro = ?
+      WHERE isbn = ?;
+      `,
+      [
+        titulo,
+        descricao,
+        data_de_aquisicao,
+        estado_de_conservacao,
+        localizacao_fisica,
+        uri_da_capa_do_livro,
+        status_do_livro,
+        isbn,
+      ]
+    );
+
+    // Remove as categorias existentes do livro
+    await connection.query(
+      `
+      DELETE FROM Categoria_dos_Livros
+      WHERE isbn = ?;
+      `,
+      [isbn]
+    );
+
+    // Adiciona as novas categorias
+    for (const categoria of categorias) {
+      await connection.query(
+        `
+        INSERT INTO Categoria_dos_Livros (isbn, categoria)
+        VALUES (?, ?)
+        `,
+        [isbn, categoria]
+      );
+    }
+
+    // Remove os autores existentes do livro
+    await connection.query(
+      `
+      DELETE FROM Autor
+      WHERE isbn = ?;
+      `,
+      [isbn]
+    );
+
+    // Adiciona os novos autores
+    for (const autor of autores) {
+      await connection.query(
+        `
+        INSERT INTO Autor (isbn, autor)
+        VALUES (?, ?)
+        `,
+        [isbn, autor]
+      );
+    }
+
+    await connection.commit();
+  } catch (error) {
+
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 }
 
 export async function editLivroStatus(isbn, status_do_livro) {
@@ -223,21 +295,22 @@ export async function createMaterial(
   estado_de_conservacao,
   localizacao_fisica,
   uri_da_foto_do_material,
-  status_do_material
+  status_do_material,
+  categorias
 ) {
-  const result = await pool.query(
+  await pool.query(
     `
-    INSERT INTO Materiais_Didaticos (
-        id,
-        descricao,
-        numero_de_serie,
-        data_de_aquisicao,
-        estado_de_conservacao,
-        localizacao_fisica,
-        uri_da_foto_do_material,
-        status_do_material)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `,
+      INSERT INTO Materiais_Didaticos (
+          id,
+          descricao,
+          numero_de_serie,
+          data_de_aquisicao,
+          estado_de_conservacao,
+          localizacao_fisica,
+          uri_da_foto_do_material,
+          status_do_material)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `,
     [
       id,
       descricao,
@@ -249,7 +322,16 @@ export async function createMaterial(
       status_do_material,
     ]
   );
-  return result;
+
+  for (const categoria of categorias) {
+    await pool.query(
+      `
+        INSERT INTO Categoria_dos_Materiais (id, categoria)
+        VALUES (?, ?)
+        `,
+      [id, categoria]
+    );
+  }
 }
 
 /* 
@@ -266,25 +348,23 @@ export async function editMaterial(
   estado_de_conservacao,
   localizacao_fisica,
   uri_da_foto_do_material,
-  status_do_material
+  status_do_material,
+  categorias
 ) {
-  const result = await pool.query(
+  // Atualiza as informações do material
+  await pool.query(
     `
     UPDATE Materiais_Didaticos
-    SET 
-        id = ?,
-        descricao = ?,
+    SET descricao = ?,
         numero_de_serie = ?,
         data_de_aquisicao = ?,
         estado_de_conservacao = ?,
         localizacao_fisica = ?,
         uri_da_foto_do_material = ?,
         status_do_material = ?
-    WHERE
-        id = ?;
+    WHERE id = ?;
     `,
     [
-      id,
       descricao,
       numero_de_serie,
       data_de_aquisicao,
@@ -295,7 +375,26 @@ export async function editMaterial(
       id,
     ]
   );
-  return result;
+
+  // Remove as categorias existentes do material
+  await pool.query(
+    `
+    DELETE FROM Categoria_dos_Materiais
+    WHERE id = ?;
+    `,
+    [id]
+  );
+
+  // Adiciona as novas categorias
+  for (const categoria of categorias) {
+    await pool.query(
+      `
+      INSERT INTO Categoria_dos_Materiais (id, categoria)
+      VALUES (?, ?)
+      `,
+      [id, categoria]
+    );
+  }
 }
 
 export async function editMaterialStatus(id, status_do_material) {
