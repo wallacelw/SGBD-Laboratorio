@@ -57,7 +57,7 @@ const AddMaterialEmprestimo = () => {
       />
       <button onClick={handleClick}> Solicitar </button>
       {error && "Algo deu errado!"}
-      <Link className="hyperlink" to="/Books">
+      <Link className="hyperlink" to="/Materials">
         {" "}
         Voltar para a Página de Materiais{" "}
       </Link>

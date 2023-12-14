@@ -18,7 +18,7 @@ function ListarLivros() {
   }, [isAdmin]);
 
   const verificarStatusELidarComEmprestimo = (isbn, status) => {
-    if (status === "disponível") {
+    if (status === "disponivel") {
       navigate(`/Book/Add-emprestimo/${isbn}`);
     } else {
       toast.error(

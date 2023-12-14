@@ -20,14 +20,14 @@ create table Categoria_dos_Livros(
 	isbn bigint,
 	categoria varchar(100),
     primary key (isbn, categoria),
-    foreign key (isbn) references Livros (isbn)
+    foreign key (isbn) references Livros (isbn) on delete cascade
 );
 
 create table Autor(
 	isbn bigint,
 	autor varchar(100),
     primary key (isbn, autor),
-    foreign key (isbn) references Livros (isbn)
+    foreign key (isbn) references Livros (isbn) on delete cascade
 );
 
 -------------------- Materiais --------------------
@@ -48,7 +48,7 @@ create table Categoria_dos_Materiais(
 	id bigint,
 	categoria varchar(100),
     primary key (id, categoria),
-    foreign key (id) references Materiais_Didaticos (id)
+    foreign key (id) references Materiais_Didaticos (id) on delete cascade
 );
 
 -------------------- Usuarios --------------------
@@ -74,9 +74,9 @@ create table Emprestimos(
     data_de_devolucao_prevista date,
     status_do_emprestimo enum("solicitado", "emprestado", "devolvido"),
     primary key (id),
-    foreign key (id_do_usuario) references Usuarios (id),
-    foreign key (id_do_livro) references Livros (isbn),
-    foreign key (id_do_material) references Materiais_Didaticos (id)
+    foreign key (id_do_usuario) references Usuarios (id) on delete cascade,
+    foreign key (id_do_livro) references Livros (isbn) on delete cascade,
+    foreign key (id_do_material) references Materiais_Didaticos (id) on delete cascade
 );
 
 -------------------- Dados --------------------
@@ -193,9 +193,9 @@ insert into Usuarios (
     uri_da_foto_do_usuario
 )
 values 
-(1, 'root', 'adm', 'administrador', 'admin', '$2a$08$l2BRORSq5cx/01g0NjFZx.LYyRB46flS2uFZn13aFpHGTO4OVtqry', 'secret'),
-(2, 'estudante1', 'x', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'secret'),
-(3, 'estudante2', 'x', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'secret')
+(1, 'root', 'adm', 'administrador', 'admin', '$2a$08$l2BRORSq5cx/01g0NjFZx.LYyRB46flS2uFZn13aFpHGTO4OVtqry', 'https://i.pinimg.com/originals/6e/51/32/6e5132a90812ad1abf3711135a5cf406.png'),
+(2, 'Naruto', 'Uzumaki', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'https://pngimg.com/d/naruto_PNG53.png'),
+(3, 'Monkey D.', 'Luffy', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'https://i.pinimg.com/originals/ed/3e/dc/ed3edc282074bb5cc7b739eace9e8153.png')
 ;
 
 insert into Emprestimos (

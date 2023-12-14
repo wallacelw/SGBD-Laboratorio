@@ -17,8 +17,25 @@ function ListarMateriais() {
     setIsAdmin(authLevel == 2); // Setta admin como um booleano guardando o dado se o usuário atual é admin ou não
   }, [isAdmin])
 
+
+  const verificarStatusELidarComEmprestimo = (id, status) => {
+    if (status === "disponivel") {
+      navigate(`/Materials/Add-emprestimo/${id}`);
+    } else {
+      toast.error(
+        "Material não está disponível, logo não é possível realizar empréstimo"
+      );
+    }
+  };
+
   const handleEdit = (id) => {
-    navigate(`/Materials/Add-emprestimo/${id}`);
+    const materialDisponivel = materiais.find((material) => material.id === id);
+    if (materialDisponivel) {
+      verificarStatusELidarComEmprestimo(
+        id,
+        materialDisponivel.status_do_material
+      );
+    }
   };
 
   const handleDelete = async (id) => {
