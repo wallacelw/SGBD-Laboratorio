@@ -342,8 +342,7 @@ app.post("/login", async (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-  console.log("logout");
-  res.status(200);
+  res.status(200).send();
 });
 
 /* 
