@@ -11,14 +11,30 @@ function ListarLivros() {
   const [livrosFiltrados, setLivrosFiltrados] = useState([]);
   const navigate = useNavigate();
 
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const authLevel = localStorage.getItem("authLevel");
     setIsAdmin(authLevel == 2); // Setta admin como um booleano guardando o dado se o usuário atual é admin ou não
-  }, [isAdmin])
+  }, [isAdmin]);
+
+  const verificarStatusELidarComEmprestimo = (isbn, status) => {
+    if (status === "disponível") {
+      navigate(`/Book/Add-emprestimo/${isbn}`);
+    } else {
+      toast.error(
+        "Livro não está disponível, logo não é possível realizar empréstimo"
+      );
+    }
+  };
 
   const handleEdit = (isbn) => {
-    navigate(`/Book/Add-emprestimo/${isbn}`);
+    const livroSelecionado = livros.find((livro) => livro.isbn === isbn);
+    if (livroSelecionado) {
+      verificarStatusELidarComEmprestimo(
+        isbn,
+        livroSelecionado.status_do_livro
+      );
+    }
   };
 
   const handleDelete = async (isbn) => {
@@ -168,38 +184,41 @@ function ListarLivros() {
                 )}
               </td>
               <td>
-                <button className="linha" onClick={() => handleEdit(livro.isbn)}>
+                <button
+                  className="linha"
+                  onClick={() => handleEdit(livro.isbn)}
+                >
                   Solicitar emprestimo
                 </button>
               </td>
-              { isAdmin ?
-              <>
-              <td>
-                <button
-                  className="delete"
-                  onClick={() => handleDelete(livro.isbn)}
-                >
-                  {" "}
-                  Apagar{" "}
-                </button>
-              </td>
-              <td>
-                <button className="edit">
-                  {" "}
-                  <Link to={`/Book/Edit/${livro.isbn}`}> Editar </Link>{" "}
-                </button>
-              </td>
-              </>
-              : null }
+              {isAdmin ? (
+                <>
+                  <td>
+                    <button
+                      className="delete"
+                      onClick={() => handleDelete(livro.isbn)}
+                    >
+                      {" "}
+                      Apagar{" "}
+                    </button>
+                  </td>
+                  <td>
+                    <button className="edit">
+                      {" "}
+                      <Link to={`/Book/Edit/${livro.isbn}`}> Editar </Link>{" "}
+                    </button>
+                  </td>
+                </>
+              ) : null}
             </tr>
           ))}
         </tbody>
       </table>
-      { isAdmin ?
-      <button className="button_redirect">
-        <Link to="/Book/Add"> Adicionar novo livro </Link>
-      </button>
-      : null }
+      {isAdmin ? (
+        <button className="button_redirect">
+          <Link to="/Book/Add"> Adicionar novo livro </Link>
+        </button>
+      ) : null}
       <button className="button_redirect">
         <Link to="/"> Voltar para página inicial </Link>
       </button>

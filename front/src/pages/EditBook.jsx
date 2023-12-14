@@ -11,6 +11,7 @@ const EditBook = () => {
     data_de_aquisicao: null,
     estado_de_conservacao: "",
     localizacao_fisica: "",
+    status_do_livro: "disponivel",
     uri_da_capa_do_livro: null,
   });
 
@@ -26,9 +27,11 @@ const EditBook = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3333/livro/${bookIsbn}`, book, {headers: headers}).then(
-        (res) => toast(res.data.message)
-    );
+      await axios
+        .put(`http://localhost:3333/livro/${bookIsbn}`, book, {
+          headers: headers,
+        })
+        .then((res) => toast(res.data.message));
       navigate("/Books");
     } catch (err) {
       console.log(err);
@@ -81,6 +84,16 @@ const EditBook = () => {
         onChange={handleChange}
         name="uri_da_capa_do_livro"
       />
+      <select
+        className="box_input"
+        name="status_do_livro"
+        value={book.status_do_livro}
+        onChange={handleChange}
+      >
+        <option value="disponivel">Disponível</option>
+        <option value="nao_disponivel">Não Disponível</option>
+      </select>
+
       <button onClick={handleClick}> Editar </button>
       {error && "Algo deu errado!"}
       <Link className="hyperlink" to="/Books">

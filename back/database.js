@@ -98,7 +98,7 @@ export async function createLivro(
       ]
     );
   } catch (err) {
-    throw err
+    throw err;
   }
   return result;
 }
@@ -158,10 +158,7 @@ export async function editLivroStatus(isbn, status_do_livro) {
     WHERE
       isbn = ?;
     `,
-    [
-      status_do_livro,
-      isbn,
-    ]
+    [status_do_livro, isbn]
   );
   return result;
 }
@@ -310,10 +307,7 @@ export async function editMaterialStatus(id, status_do_material) {
     WHERE
         id = ?;
     `,
-    [
-      status_do_material,
-      id,
-    ]
+    [status_do_material, id]
   );
   return result;
 }
@@ -354,13 +348,17 @@ export async function getUsers() {
 }
 
 export async function getUserByLogin(login) {
-  const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [login])
-  return result
+  const [result] = await pool.query("SELECT * FROM Usuarios WHERE login = ?", [
+    login,
+  ]);
+  return result;
 }
 
 export async function getUserById(id) {
-  const [result] = await pool.query("SELECT * FROM Usuarios WHERE id = ?", [id])
-  return result
+  const [result] = await pool.query("SELECT * FROM Usuarios WHERE id = ?", [
+    id,
+  ]);
+  return result;
 }
 
 /* 
@@ -552,10 +550,7 @@ export async function editEmprestimoStatus(id) {
     WHERE
         id = ?;
     `,
-    [
-      "devolvido",
-      id,
-    ]
+    ["devolvido", id]
   );
   return result;
 }
