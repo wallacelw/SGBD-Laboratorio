@@ -58,7 +58,7 @@ function Emprestimos() {
           ).toLocaleDateString("pt-BR"),
         }));
         setEmprestimos(emprestimosFormatados);
-        setEmprestimosFiltrados(emprestimosFormatados);
+        setEmprestimosFiltrados(emprestimosFormatados.filter((emprestimo) => emprestimo.id_do_usuario == localStorage.getItem("userId")));
       })
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []);
