@@ -55,7 +55,7 @@ const EditUser = () => {
 
             <input className="box_input" type="password" placeholder="Senha" onChange={handleChange} name="senha"/>
 
-            <input className="box_input" type="number" placeholder="URI da Capa" onChange={handleChange} name="uri_da_foto_do_usuario"/>
+            <input className="box_input" type="text" placeholder="URI da Foto" onChange={handleChange} name="uri_da_foto_do_usuario"/>
 
             <button onClick={handleClick}> Atualizar </button>
             {error && "Algo deu errado!"}

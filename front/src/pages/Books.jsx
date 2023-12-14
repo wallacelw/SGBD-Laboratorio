@@ -11,6 +11,12 @@ function ListarLivros() {
   const [livrosFiltrados, setLivrosFiltrados] = useState([]);
   const navigate = useNavigate();
 
+  const [isAdmin, setIsAdmin] = useState(false)
+  useEffect(() => {
+    const authLevel = localStorage.getItem("authLevel");
+    setIsAdmin(authLevel == 2); // Setta admin como um booleano guardando o dado se o usuário atual é admin ou não
+  }, [isAdmin])
+
   const handleEdit = (isbn) => {
     navigate(`/Book/Add-emprestimo/${isbn}`);
   };
@@ -166,6 +172,8 @@ function ListarLivros() {
                   Solicitar emprestimo
                 </button>
               </td>
+              { isAdmin ?
+              <>
               <td>
                 <button
                   className="delete"
@@ -181,13 +189,17 @@ function ListarLivros() {
                   <Link to={`/Book/Edit/${livro.isbn}`}> Editar </Link>{" "}
                 </button>
               </td>
+              </>
+              : null }
             </tr>
           ))}
         </tbody>
       </table>
+      { isAdmin ?
       <button className="button_redirect">
         <Link to="/Book/Add"> Adicionar novo livro </Link>
       </button>
+      : null }
       <button className="button_redirect">
         <Link to="/"> Voltar para página inicial </Link>
       </button>

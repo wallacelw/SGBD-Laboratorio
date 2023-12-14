@@ -11,7 +11,7 @@ const pool = mysql
   .createPool({
     host: "127.0.0.1",
     user: "root",
-    password: "Jv28042001",
+    password: "123456",
     database: "projeto_db",
   })
   .promise();

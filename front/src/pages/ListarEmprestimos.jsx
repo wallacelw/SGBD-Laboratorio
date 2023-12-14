@@ -11,6 +11,12 @@ function Emprestimos() {
   const [emprestimosFiltrados, setEmprestimosFiltrados] = useState([]);
   const navigate = useNavigate();
 
+  const [isAdmin, setIsAdmin] = useState(false)
+  useEffect(() => {
+    const authLevel = localStorage.getItem("authLevel");
+    setIsAdmin(authLevel == 2); // Setta admin como um booleano guardando o dado se o usuário atual é admin ou não
+  }, [isAdmin])
+
   const handleEdit = async (emprestimo) => {
     navigate(`/Edit-Emprestimo/${emprestimo.id}/${emprestimo.id_do_livro}/${emprestimo.id_do_material}/${emprestimo.id_do_usuario}`);
   };
@@ -102,14 +108,18 @@ function Emprestimos() {
               <td className="tabela">{emprestimo.data_de_devolucao_prevista}</td>
               <td className="tabela">{emprestimo.status_do_emprestimo}</td>
               <td>
-                <button onClick={() => handleEdit(emprestimo)}>Editar</button>
-              </td>
-              <td>
                 <button onClick={() => handleReturn(emprestimo)}>Devolver</button>
+              </td>
+              { isAdmin ?
+              <>
+              <td>
+                <button onClick={() => handleEdit(emprestimo)}>Editar</button>
               </td>
               <td>
                 <button onClick={() => handleDelete(emprestimo)}>Apagar</button>
               </td>
+              </>
+              : null}
             </tr>
           ))}
         </tbody>
