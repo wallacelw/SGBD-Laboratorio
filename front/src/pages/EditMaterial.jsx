@@ -11,9 +11,10 @@ const EditMaterial = () => {
     data_de_aquisicao: null,
     estado_de_conservacao: "",
     localizacao_fisica: "",
-    status_do_material: "disponivel",
     uri_da_foto_do_material: null,
+    status_do_material: "disponivel",
   });
+  const [categorias, setCategorias] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,11 +28,16 @@ const EditMaterial = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .put(`http://localhost:3333/material/${materialId}`, material, {
-          headers: headers,
-        })
-        .then((res) => toast(res.data.message));
+      const dataToSend = {
+        ...material,
+        categorias: categorias.split(",").map((item) => item.trim()),
+      };
+      await axios.put(
+        `http://localhost:3333/material/${materialId}`,
+        dataToSend,
+        { headers: headers }
+      );
+      toast("Material editado com sucesso!");
       navigate("/Materials");
     } catch (err) {
       console.log(err);
@@ -79,10 +85,17 @@ const EditMaterial = () => {
       />
       <input
         className="box_input"
-        type="text"
+        type="number"
         placeholder="URI do Material"
         onChange={handleChange}
         name="uri_da_foto_do_material"
+      />
+      <input
+        className="box_input"
+        type="text"
+        placeholder="Categorias (separadas por vírgula)"
+        value={categorias}
+        onChange={(e) => setCategorias(e.target.value)}
       />
       <select
         className="box_input"
@@ -93,7 +106,6 @@ const EditMaterial = () => {
         <option value="disponivel">Disponível</option>
         <option value="nao_disponivel">Não Disponível</option>
       </select>
-
       <button onClick={handleClick}> Editar </button>
       {error && "Algo deu errado!"}
       <Link className="hyperlink" to="/Materials">
