@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 function Emprestimos() {
   const [emprestimos, setEmprestimos] = useState([]);
@@ -14,13 +16,15 @@ function Emprestimos() {
   };
 
   const handleReturn = async (emprestimo) => {
-    await axios.put("http://localhost:3333/status/", emprestimo);
+    await axios.put("http://localhost:3333/status/", emprestimo, {headers: headers});
     window.location.reload();
   };
 
   const handleDelete = async (emprestimo) => {
     try {
-      await axios.delete(`http://localhost:3333/emprestimo/${emprestimo.id}`);
+      await axios.delete(`http://localhost:3333/emprestimo/${emprestimo.id}`, {headers: headers}).then(
+        (res) => toast(res.data.message)
+    );
       window.location.reload();
     } catch (error) {
       console.log(error);

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom"
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 const Users = () => {
 
@@ -21,7 +23,9 @@ const Users = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3333/usuario/${id}`)
+            await axios.delete(`http://localhost:3333/usuario/${id}`, {headers: headers}).then(
+                (res) => toast(res.data.message)
+            )
             window.location.reload()
         } 
         catch (error) {

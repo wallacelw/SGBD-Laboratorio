@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 const EditUser = () => {
     const [user, setUser] = useState({
@@ -24,7 +26,9 @@ const EditUser = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3333/usuario/${UserId}`, user);
+            await axios.put(`http://localhost:3333/usuario/${UserId}`, user, {headers: headers}).then(
+                (res) => toast(res.data.message)
+            );
             navigate("/Users");
         } catch (err) {
             console.log(err);

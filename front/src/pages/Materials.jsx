@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 function ListarMateriais() {
   const [materiais, setMateriais] = useState([]);
@@ -15,7 +17,9 @@ function ListarMateriais() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3333/material/${id}`);
+      await axios.delete(`http://localhost:3333/material/${id}`, {headers: headers}).then(
+        (res) => toast(res.data.message)
+    );
       window.location.reload();
     } catch (error) {
       console.log(error);

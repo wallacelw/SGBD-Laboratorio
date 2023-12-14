@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 const Login = () => {
   const [user, setUser] = useState({
     login: "",
@@ -22,6 +23,8 @@ const Login = () => {
       await axios.post("http://localhost:3333/login", user, {withCredentials: true,}).then((res) => {
         localStorage.setItem("authLevel", res.data.authLevel);
         localStorage.setItem("authToken", res.data.token);
+        axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("authToken");
+        toast(res.data.message);
       })
       navigate("/Books");
     } catch (error) {

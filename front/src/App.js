@@ -14,6 +14,8 @@ import ListarEmprestimos from "./pages/ListarEmprestimos";
 import EditEmprestimo from "./pages/EditEmprestimo";
 import AddBookEmprestimo from "./pages/AddBookEmprestimo";
 import AddMaterialEmprestimo from "./pages/AddMaterialEmprestimo";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -48,6 +50,18 @@ function App() {
           <Route path="/Edit-Emprestimo/:id/:idlivro/:idmaterial/:idusuario" element={<EditEmprestimo />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }

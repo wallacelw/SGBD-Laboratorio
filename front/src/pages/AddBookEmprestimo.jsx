@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 const AddBookEmprestimo = () => {
     const location = useLocation();
@@ -25,7 +27,9 @@ const AddBookEmprestimo = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3333/emprestimo', loan);
+            await axios.post('http://localhost:3333/emprestimo', loan, {headers: headers}).then(
+                (res) => toast(res.data.message)
+            );
             navigate("/Books");
         } catch (err) {
             console.log(err);

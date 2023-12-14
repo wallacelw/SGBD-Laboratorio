@@ -4,6 +4,7 @@ import { promisify } from "util"
 
 export async function isAuthorized(req, res, next) {
     var token = await req.headers.authorization.split(' ')[1];
+    var message;
 
     if (token) {
         try {
@@ -12,12 +13,12 @@ export async function isAuthorized(req, res, next) {
             const user = await db.getUserById(id)
 
             if (!user) {
-                return res.status(401).send("Nenhum usuário corresponde ao token fornecido.")
+                return res.status(401).send({message: "Nenhum usuário corresponde ao token fornecido."})
             }
 
             if (user[0].funcao != "administrador") {
                 console.log(user)
-                return res.status(401).send("Somente administradores podem realizar essa função.")
+                return res.status(401).send({message: "Somente administradores podem realizar essa função."})
             }
 
             return next();
@@ -26,7 +27,7 @@ export async function isAuthorized(req, res, next) {
             return res.status(500).send(err)
         }
     } else {
-        res.status(401).send("Usuário não está logado!")
+        res.status(401).send({message: "Usuário não está logado!"})
         next();
     }
 

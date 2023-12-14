@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 const EditMaterial = () => {
     const [material, setMaterial] = useState({
@@ -24,7 +26,9 @@ const EditMaterial = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3333/material/${materialId}`, material);
+            await axios.put(`http://localhost:3333/material/${materialId}`, material, {headers: headers}).then(
+                (res) => toast(res.data.message)
+            );
             navigate("/Materials");
         } catch (err) {
             console.log(err);

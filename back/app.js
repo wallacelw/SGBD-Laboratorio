@@ -83,7 +83,7 @@ app.post("/livro", isAuthorized, async (req, res) => {
     uri_da_capa_do_livro,
     status_do_livro
   );
-  res.status(201).send(livro);
+  res.status(201).send({message: "Livro criado com sucesso."});
 });
 
 /* 
@@ -113,7 +113,7 @@ app.put("/livro/:isbn", isAuthorized, async (req, res) => {
     uri_da_capa_do_livro,
     status_do_livro
   );
-  res.status(200).send(livro);
+  res.status(200).send({message: "Livro atualizado com sucesso."});
 });
 
 /* 
@@ -125,7 +125,7 @@ app.put("/livro/:isbn", isAuthorized, async (req, res) => {
 app.delete("/livro/:isbn", isAuthorized, async (req, res) => {
   const isbn = req.params.isbn;
   const livro = await db.deleteLivro(isbn);
-  res.status(200).send(livro);
+  res.status(200).send({message: "Livro deletado com sucesso."});
 });
 
 /* 
@@ -180,7 +180,7 @@ app.post("/material", isAuthorized, async (req, res) => {
     uri_da_foto_do_material,
     status_do_material
   );
-  res.status(201).send(material);
+  res.status(201).send({message: "Material criado com sucesso."});
 });
 
 /* 
@@ -210,7 +210,7 @@ app.put("/material/:id", isAuthorized, async (req, res) => {
     uri_da_foto_do_material,
     status_do_material
   );
-  res.status(200).send(material);
+  res.status(200).send({message: "Material editado com sucesso."});
 });
 
 /* 
@@ -222,7 +222,7 @@ app.put("/material/:id", isAuthorized, async (req, res) => {
 app.delete("/material/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const material = await db.deleteMaterial(id);
-  res.status(200).send(material);
+  res.status(200).send({message: "Material deletado com sucesso."});
 });
 
 /* 
@@ -248,7 +248,7 @@ app.get("/usuarios", async (req, res) => {
 --------------------------------
 */
 
-app.post("/register", isAuthorized, async (req, res) => {
+app.post("/register",  async (req, res) => {
     const {id,
            nome,
            sobrenome,
@@ -258,12 +258,13 @@ app.post("/register", isAuthorized, async (req, res) => {
            uri_da_foto_do_usuario} = req.body;
     const users = await db.getUserByLogin(login)
     if (users.length > 0) {
-        return res.status(409).send("Login já está em uso!")
+        return res.status(409).send({message: "Login já está em uso!"})
     }
 
     let hashedPassword = await bcrypt.hash(senha, 8)
+    console.log(hashedPassword);
     const result = db.createUser(id, nome, sobrenome, funcao, login, hashedPassword, uri_da_foto_do_usuario)
-    res.status(201).send(result)
+    res.status(201).send({message: "Usuário criado com sucesso."})
 })
 
 /* 
@@ -285,7 +286,7 @@ app.put("/usuario/:id", isAuthorized, async (req, res) => {
     senha,
     uri_da_foto_do_usuario
   );
-  res.status(200).send(usuario);
+  res.status(200).send({message: "Usuário editado com sucesso."});
 });
 
 /* 
@@ -297,7 +298,7 @@ app.put("/usuario/:id", isAuthorized, async (req, res) => {
 app.delete("/usuario/:id", isAuthorized, async (req, res) => {
   const id = req.params.id;
   const usuario = await db.deleteUser(id);
-  res.status(200).send(usuario);
+  res.status(200).send({message: "Usuário deletado com sucesso."});
 });
 
 /* 
@@ -311,6 +312,7 @@ app.post("/login", async (req, res) => {
 
     const {login, senha} = req.body
     const [user] = await db.getUserByLogin(login)
+    console.log(user);
 
     if (!user || !await bcrypt.compare(senha, user.senha)) {
         return res.status(401).send("Login ou senha errados!")
@@ -331,7 +333,8 @@ app.post("/login", async (req, res) => {
     } else {
         authLevel = 1
     }
-    res.status(200).send({authLevel, token})
+    let message = "Login realizado com sucesso!"
+    res.status(200).send({authLevel, token, message})
 })
 
 app.get("/logout", (req, res) => {
@@ -379,7 +382,7 @@ app.post("/emprestimo", async (req, res) => {
   } = req.body;
 
   if (status_do_emprestimo != "solicitado") {
-    res.status(400).send("Empréstimos criados podem apenas ser solicitados e após isso aprovados por um administrador.")
+    res.status(400).send({message: "Empréstimos criados podem apenas ser solicitados e após isso aprovados por um administrador."})
   }
 
   if (id_do_livro) {
@@ -398,7 +401,7 @@ app.post("/emprestimo", async (req, res) => {
     data_de_devolucao_prevista,
     status_do_emprestimo
   );
-  res.status(201).send(emprestimo);
+  res.status(201).send({message: "Emprestimo criado com sucesso."});
 });
 
 /* 
@@ -451,7 +454,7 @@ app.put("/status", isAuthorized, async (req, res) => {
 
   const result = await db.editEmprestimoStatus(id);
 
-  res.status(200).send(result);
+  res.status(200).send({message: "Emprestimo atualizado com sucesso."});
 });
 
   /* 
@@ -463,7 +466,7 @@ app.put("/status", isAuthorized, async (req, res) => {
   app.delete("/emprestimo/:id", isAuthorized, async (req, res) => {
     const id = req.params.id;
     const emprestimo = await db.deleteEmprestimo(id);
-    res.status(200).send(emprestimo);
+    res.status(200).send({message: "Emprestimo deletado com sucesso."});
   });
 
 /* 

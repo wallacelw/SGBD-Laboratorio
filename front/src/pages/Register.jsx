@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { headers } from "../utils/utils";
+import { toast } from "react-toastify";
 
 const Register = () => {
     const [user, setUser] = useState({
@@ -24,7 +26,9 @@ const Register = () => {
     const handleClick = async (e) => {
         e.preventDefault()
         try {
-            await axios.post("http://localhost:3333/register", user)
+            await axios.post("http://localhost:3333/register", user, {headers: headers}).then(
+                (res) => toast(res.data.message)
+            )
             navigate("/Users");
         } catch (error) {
             console.log(error)
