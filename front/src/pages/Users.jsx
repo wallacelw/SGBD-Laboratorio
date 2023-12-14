@@ -36,12 +36,12 @@ const Users = () => {
     return (
         <div>
             <h1 className="title"> Usuários </h1>
-            <div className="users">
+            <div className="books">
                 {users.map(user => (
-                    <div className="user" key={user.id}>
+                    <div className="book" key={user.id}>
                         {user.uri_da_foto_do_usuario && <img src={user.uri_da_foto_do_usuario} alt="" />}
-                        <h2>{user.nome} {user.sobrenome}</h2>
-                        <p>{user.funcao}</p>
+                        <h2 className="name">{user.nome} {user.sobrenome}</h2>
+                        <p className="name">{user.funcao}</p>
                         <button className="delete" onClick={() => handleDelete(user.id)}> Apagar </button>
                         <button className="edit"> <Link to={`/User/Edit/${user.id}`}> Editar </Link> </button>
                     </div>

@@ -58,8 +58,8 @@ function Emprestimos() {
 
   return (
     <div>
-      <h1>Lista de Empréstimos</h1>
-      <div>
+      <h1 className="title">Lista de Empréstimos</h1>
+      <div className="box_input">
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
           <option value="id">ID do Emprestimo</option>
@@ -79,28 +79,28 @@ function Emprestimos() {
           onChange={(e) => setPalavraChave(e.target.value)}
         />
       </div>
-      <table>
+      <table className="tabela">
         <thead>
           <tr>
-            <th>ID do Emprestimo</th>
-            <th>ID do Livro</th>
-            <th>ID do Material</th>
-            <th>ID do Usuário</th>
-            <th>Data do Empréstimo</th>
-            <th>Data de Devolução Prevista</th>
-            <th>Status do Empréstimo</th>
+            <th className="tabela">ID do Emprestimo</th>
+            <th className="tabela">ID do Livro</th>
+            <th className="tabela">ID do Material</th>
+            <th className="tabela">ID do Usuário</th>
+            <th className="tabela">Data do Empréstimo</th>
+            <th className="tabela">Data de Devolução Prevista</th>
+            <th className="tabela">Status do Empréstimo</th>
           </tr>
         </thead>
         <tbody>
           {emprestimosFiltrados.map((emprestimo, index) => (
-            <tr key={index}>
-              <td>{emprestimo.id}</td>
-              <td>{emprestimo.id_do_livro}</td>
-              <td>{emprestimo.id_do_material}</td>
-              <td>{emprestimo.id_do_usuario}</td>
-              <td>{emprestimo.data_do_emprestimo}</td>
-              <td>{emprestimo.data_de_devolucao_prevista}</td>
-              <td>{emprestimo.status_do_emprestimo}</td>
+            <tr className="tabela" key={index}>
+              <td className="tabela">{emprestimo.id}</td>
+              <td className="tabela">{emprestimo.id_do_livro}</td>
+              <td className="tabela">{emprestimo.id_do_material}</td>
+              <td className="tabela">{emprestimo.id_do_usuario}</td>
+              <td className="tabela">{emprestimo.data_do_emprestimo}</td>
+              <td className="tabela">{emprestimo.data_de_devolucao_prevista}</td>
+              <td className="tabela">{emprestimo.status_do_emprestimo}</td>
               <td>
                 <button onClick={() => handleEdit(emprestimo)}>Editar</button>
               </td>

@@ -47,11 +47,13 @@ const EditEmprestimo = () => {
             <input className="box_input" type="date" placeholder="Data do Emprestimo" onChange={handleChange} name="data_do_emprestimo"/>
             <input className="box_input" type="date" placeholder="Data da Devolução Prevista" onChange={handleChange} name="data_de_devolucao_prevista"/>
 
-            <input type="radio" id="solicitado" name="status_do_emprestimo" onChange={handleChange} value="solicitado"/>
-            <label htmlFor="solicitado"> Solicitado </label>
+            <div className="container_radio">
+                <input className="radio" type="radio" id="solicitado" name="status_do_emprestimo" onChange={handleChange} value="solicitado"/>
+                    <label className="radio_input" htmlFor="solicitado"> Solicitado </label>
 
-            <input type="radio" id="emprestado" name="status_do_emprestimo" onChange={handleChange} value="emprestado"/>
-            <label htmlFor="emprestado"> Emprestado </label>
+                <input className="radio" type="radio" id="emprestado" name="status_do_emprestimo" onChange={handleChange} value="emprestado"/>
+                    <label className="radio_input" htmlFor="emprestado"> Emprestado </label>
+            </div>
 
             <button onClick={handleClick}> Editar </button>
             {error && "Algo deu errado!"}

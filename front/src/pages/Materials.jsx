@@ -61,8 +61,8 @@ function ListarMateriais() {
 
   return (
     <div>
-      <h1>Lista de Materiais Didáticos</h1>
-      <div>
+      <h1 className="title">Lista de Materiais Didáticos</h1>
+      <div className="box_input">
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
           <option value="descricao">Descrição</option>
@@ -80,32 +80,32 @@ function ListarMateriais() {
           onChange={(e) => setPalavraChave(e.target.value)}
         />
       </div>
-      <table>
+      <table className="tabela">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Descrição</th>
-            <th>Número de Série</th>
-            <th>Categorias</th>
-            <th>Data de Aquisição</th>
-            <th>Estado de Conservação</th>
-            <th>Localização Física</th>
-            <th>Status do Material</th>
-            <th>Foto</th>
+            <th className="tabela">ID</th>
+            <th className="tabela">Descrição</th>
+            <th className="tabela">Número de Série</th>
+            <th className="tabela">Categorias</th>
+            <th className="tabela">Data de Aquisição</th>
+            <th className="tabela">Estado de Conservação</th>
+            <th className="tabela">Localização Física</th>
+            <th className="tabela">Status do Material</th>
+            <th className="tabela">Foto</th>
           </tr>
         </thead>
         <tbody>
           {materiaisFiltrados.map((material, index) => (
-            <tr key={index}>
-              <td>{material.id}</td>
-              <td>{material.descricao}</td>
-              <td>{material.numero_de_serie}</td>
-              <td>[]</td>
-              <td>{material.data_de_aquisicao}</td>
-              <td>{material.estado_de_conservacao}</td>
-              <td>{material.localizacao_fisica}</td>
-              <td>{material.status_do_material}</td>
-              <td>
+            <tr className="tabela" key={index}>
+              <td className="margem">{material.id}</td>
+              <td className="margem">{material.descricao}</td>
+              <td className="margem">{material.numero_de_serie}</td>
+              <td className="margem">[]</td>
+              <td className="margem">{material.data_de_aquisicao}</td>
+              <td className="margem">{material.estado_de_conservacao}</td>
+              <td className="margem">{material.localizacao_fisica}</td>
+              <td className="margem">{material.status_do_material}</td>
+            <td>
                 {material.uri_da_foto_do_material ? (
                   <img
                     src={material.uri_da_foto_do_material}
@@ -117,7 +117,7 @@ function ListarMateriais() {
                 )}
               </td>
               <td>
-                <button onClick={() => handleEdit(material.id)}>
+                <button className="linha" onClick={() => handleEdit(material.id)}>
                   Solicitar emprestimo
                 </button>
               </td>

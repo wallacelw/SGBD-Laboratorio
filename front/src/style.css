@@ -1,6 +1,6 @@
 .App{
     background: linear-gradient(#121212, #21bed0);
-    height: 100vh;
+    height: 150vh;
     padding: 0px 100px;
     display: flex;
     align-items: center;
@@ -81,7 +81,9 @@ input{
 .hyperlink_container{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    background-color: #121212;
+    border: 3px solid white;
 }
 
 .box_input{
@@ -117,4 +119,28 @@ input{
     color: #fff;
     background-color: black;
     border: 2px solid white;
+}
+
+.name{
+    color: white;
+    border: 3px solid white;
+    background-color: #121212;
+}
+
+.container_name{
+    border: 3px solid white;
+}
+
+.tabela{
+    border: 3px solid white;
+    color: white;
+    background-color: #121212;
+}
+
+.margem{
+    border: 3px solid white; ;
+}
+
+.linha{
+    white-space: nowrap;
 }

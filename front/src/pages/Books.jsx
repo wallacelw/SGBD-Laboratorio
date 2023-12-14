@@ -67,8 +67,8 @@ function ListarLivros() {
 
   return (
     <div>
-      <h1>Lista de Livros</h1>
-      <div>
+      <h1 className="title">Lista de Livros</h1>
+      <div className="box_input">
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
           <option value="titulo">Título</option>
@@ -86,31 +86,31 @@ function ListarLivros() {
           onChange={(e) => setPalavraChave(e.target.value)}
         />
       </div>
-      <table>
+      <table className="tabela">
         <thead>
           <tr>
-            <th>ISBN</th>
-            <th>Título</th>
-            <th>Descrição</th>
-            <th>Categorias</th>
-            <th>Data de Aquisição</th>
-            <th>Estado de Conservação</th>
-            <th>Localização Física</th>
-            <th>Status do Livro</th>
-            <th>Capa</th>
+            <th className="tabela">ISBN</th>
+            <th className="tabela">Título</th>
+            <th className="tabela">Descrição</th>
+            <th className="tabela">Categorias</th>
+            <th className="tabela">Data de Aquisição</th>
+            <th className="tabela">Estado de Conservação</th>
+            <th className="tabela">Localização Física</th>
+            <th className="tabela">Status do Livro</th>
+            <th className="tabela">Capa</th>
           </tr>
         </thead>
         <tbody>
           {livrosFiltrados.map((livro, index) => (
-            <tr key={index}>
-              <td>{livro.isbn}</td>
-              <td>{livro.titulo}</td>
-              <td>{livro.descricao}</td>
-              <td>[]</td>
-              <td>{livro.data_de_aquisicao}</td>
-              <td>{livro.estado_de_conservacao}</td>
-              <td>{livro.localizacao_fisica}</td>
-              <td>{livro.status_do_livro}</td>
+            <tr className="tabela" key={index}>
+              <td className="tabela">{livro.isbn}</td>
+              <td className="tabela">{livro.titulo}</td>
+              <td className="tabela">{livro.descricao}</td>
+              <td className="tabela">[]</td>
+              <td className="tabela">{livro.data_de_aquisicao}</td>
+              <td className="tabela">{livro.estado_de_conservacao}</td>
+              <td className="tabela">{livro.localizacao_fisica}</td>
+              <td className="tabela">{livro.status_do_livro}</td>
               <td>
                 {livro.uri_da_capa_do_livro ? (
                   <img
@@ -123,7 +123,7 @@ function ListarLivros() {
                 )}
               </td>
               <td>
-                <button onClick={() => handleEdit(livro.isbn)}>
+                <button className="linha" onClick={() => handleEdit(livro.isbn)}>
                   Solicitar emprestimo
                 </button>
               </td>
