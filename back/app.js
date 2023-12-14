@@ -71,23 +71,28 @@ app.post("/livro", isAuthorized, async (req, res) => {
     estado_de_conservacao,
     localizacao_fisica,
     uri_da_capa_do_livro,
-    status_do_livro
+    status_do_livro,
+    categorias,
+    autores,
   } = req.body;
+
   try {
-      const livro = await db.createLivro(
-        isbn,
-        titulo,
-        descricao,
-        data_de_aquisicao,
-        estado_de_conservacao,
-        localizacao_fisica,
-        uri_da_capa_do_livro,
-        status_do_livro
-      );
+    await db.createLivro(
+      isbn,
+      titulo,
+      descricao,
+      data_de_aquisicao,
+      estado_de_conservacao,
+      localizacao_fisica,
+      uri_da_capa_do_livro,
+      status_do_livro,
+      categorias,
+      autores
+    );
+    res.status(201).send({ message: "Livro criado com sucesso." });
   } catch (err) {
-    return res.status(400).send({error: err.sqlMessage});
+    return res.status(400).send({ error: err.sqlMessage });
   }
-  res.status(201).send({message: "Livro criado com sucesso."});
 });
 
 /* 
@@ -105,19 +110,28 @@ app.put("/livro/:isbn", isAuthorized, async (req, res) => {
     estado_de_conservacao,
     localizacao_fisica,
     uri_da_capa_do_livro,
-    status_do_livro
+    status_do_livro,
+    categorias,
+    autores,
   } = req.body;
-  const livro = await db.editLivro(
-    isbn,
-    titulo,
-    descricao,
-    data_de_aquisicao,
-    estado_de_conservacao,
-    localizacao_fisica,
-    uri_da_capa_do_livro,
-    status_do_livro
-  );
-  res.status(200).send({message: "Livro atualizado com sucesso."});
+
+  try {
+    await db.editLivro(
+      isbn,
+      titulo,
+      descricao,
+      data_de_aquisicao,
+      estado_de_conservacao,
+      localizacao_fisica,
+      uri_da_capa_do_livro,
+      status_do_livro,
+      categorias,
+      autores
+    );
+    res.status(200).send({ message: "Livro atualizado com sucesso." });
+  } catch (err) {
+    res.status(400).send({ error: err.sqlMessage });
+  }
 });
 
 /* 
@@ -172,19 +186,26 @@ app.post("/material", isAuthorized, async (req, res) => {
     estado_de_conservacao,
     localizacao_fisica,
     uri_da_foto_do_material,
-    status_do_material
+    status_do_material,
+    categorias,
   } = req.body;
-  const material = await db.createMaterial(
-    id,
-    descricao,
-    numero_de_serie,
-    data_de_aquisicao,
-    estado_de_conservacao,
-    localizacao_fisica,
-    uri_da_foto_do_material,
-    status_do_material
-  );
-  res.status(201).send({message: "Material criado com sucesso."});
+
+  try {
+    await db.createMaterial(
+      id,
+      descricao,
+      numero_de_serie,
+      data_de_aquisicao,
+      estado_de_conservacao,
+      localizacao_fisica,
+      uri_da_foto_do_material,
+      status_do_material,
+      categorias
+    );
+    res.status(201).send({ message: "Material criado com sucesso." });
+  } catch (err) {
+    res.status(400).send({ error: err.sqlMessage });
+  }
 });
 
 /* 
@@ -202,19 +223,26 @@ app.put("/material/:id", isAuthorized, async (req, res) => {
     estado_de_conservacao,
     localizacao_fisica,
     uri_da_foto_do_material,
-    status_do_material
+    status_do_material,
+    categorias,
   } = req.body;
-  const material = await db.editMaterial(
-    id,
-    descricao,
-    numero_de_serie,
-    data_de_aquisicao,
-    estado_de_conservacao,
-    localizacao_fisica,
-    uri_da_foto_do_material,
-    status_do_material
-  );
-  res.status(200).send({message: "Material editado com sucesso."});
+
+  try {
+    await db.editMaterial(
+      id,
+      descricao,
+      numero_de_serie,
+      data_de_aquisicao,
+      estado_de_conservacao,
+      localizacao_fisica,
+      uri_da_foto_do_material,
+      status_do_material,
+      categorias
+    );
+    res.status(200).send({ message: "Material editado com sucesso." });
+  } catch (err) {
+    res.status(400).send({ error: err.sqlMessage });
+  }
 });
 
 /* 
