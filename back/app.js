@@ -150,7 +150,7 @@ app.get("/materiais", async (req, res) => {
   res.status(200).send(materiais);
 });
 
-app.get("/material-categorias/:isbn", async (req, res) => {
+app.get("/material-categorias/:id", async (req, res) => {
   const id = req.params.id;
   const categorias = await db.listMaterialCategorias(id);
   res.status(200).send(categorias);
