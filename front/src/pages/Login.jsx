@@ -95,6 +95,7 @@ const Login = () => {
         </>
       : null}
       { isLogged ?
+      <>
       <div className="hyperlink_container">
           { isAdmin ?
           <div>
@@ -122,12 +123,15 @@ const Login = () => {
               Ir para a tela de Emprestimos{" "}
             </Link>
           </div>
-          <button className="login_button" onClick={handleClickLogout}>
-            {" "}
-            Sair{" "}
-          </button>
       </div>
+
+      <button className="button_redirect" onClick={handleClickLogout}>
+            {" "}
+            Deslogar Usuário{" "}
+          </button>
+    </>
       : null}
+      
     </div>
   );
 };
