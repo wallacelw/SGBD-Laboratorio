@@ -28,9 +28,16 @@ function Emprestimos() {
 
   const handleDelete = async (emprestimo) => {
     try {
-      await axios.delete(`http://localhost:3333/emprestimo/${emprestimo.id}`, {headers: headers}).then(
-        (res) => toast(res.data.message)
-    );
+      if (emprestimo.id_do_livro) {
+        await axios.delete(`http://localhost:3333/emprestimo/byISBN/${emprestimo.id}/${emprestimo.id_do_livro}`, {headers: headers}).then(
+        (res) => toast(res.data.message))
+      }
+
+      else {
+        await axios.delete(`http://localhost:3333/emprestimo/byID/${emprestimo.id}/${emprestimo.id_do_material}`, {headers: headers}).then(
+        (res) => toast(res.data.message))
+      }
+
       window.location.reload();
     } catch (error) {
       console.log(error);

@@ -484,10 +484,24 @@ app.put("/status", isAuthorized, async (req, res) => {
   --------------------------------
   */
   
-  app.delete("/emprestimo/:id", isAuthorized, async (req, res) => {
-    const id = req.params.id;
+  app.delete("/emprestimo/byISBN/:id/:isbn", isAuthorized, async (req, res) => {
+    const id = req.params.id
+    const id_do_livro = req.params.isbn
+
+    await db.editLivroStatus(id_do_livro, "disponivel");
+
     const emprestimo = await db.deleteEmprestimo(id);
-    res.status(200).send({message: "Emprestimo deletado com sucesso."});
+    res.status(200).send({message: "Emprestimo apagado com sucesso."});
+  });
+
+  app.delete("/emprestimo/byID/:id/:id_do_material", isAuthorized, async (req, res) => {
+    const id = req.params.id
+    const id_do_material = req.params.id_do_material
+
+    await db.editMaterialStatus(id_do_material, "disponivel");
+
+    const emprestimo = await db.deleteEmprestimo(id);
+    res.status(200).send({message: "Emprestimo apagado com sucesso."});
   });
 
 /* 
