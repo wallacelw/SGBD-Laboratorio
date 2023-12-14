@@ -17,29 +17,45 @@ function ListarMateriais() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3333/material/${id}`, {headers: headers}).then(
-        (res) => toast(res.data.message)
-    );
+      await axios
+        .delete(`http://localhost:3333/material/${id}`, { headers: headers })
+        .then((res) => toast(res.data.message));
       window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
+  const fetchCategorias = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3333/material-categorias/${id}`
+      );
+      return response.data; // assumindo que a API retorna uma lista de categorias
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      return []; // retorna uma lista vazia em caso de erro
+    }
+  };
+
   useEffect(() => {
     fetch("http://localhost:3333/materiais")
       .then((response) => response.json())
-      .then((data) => {
-        const formattedData = data.map((material) => {
-          return {
-            ...material,
-            data_de_aquisicao: new Date(
-              material.data_de_aquisicao
-            ).toLocaleDateString("pt-BR"),
-          };
-        });
-        setMateriais(formattedData);
-        setMateriaisFiltrados(formattedData);
+      .then(async (data) => {
+        const materiaisComCategorias = await Promise.all(
+          data.map(async (material) => {
+            const categorias = await fetchCategorias(material.id);
+            return {
+              ...material,
+              categorias,
+              data_de_aquisicao: new Date(
+                material.data_de_aquisicao
+              ).toLocaleDateString("pt-BR"),
+            };
+          })
+        );
+        setMateriais(materiaisComCategorias);
+        setMateriaisFiltrados(materiaisComCategorias);
       })
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []);
@@ -61,8 +77,8 @@ function ListarMateriais() {
 
   return (
     <div>
-      <h1 className="title">Lista de Materiais Didáticos</h1>
-      <div className="box_input">
+      <h1>Lista de Materiais Didáticos</h1>
+      <div>
         <select onChange={(e) => setFiltro(e.target.value)} value={filtro}>
           <option value="">Selecione um atributo</option>
           <option value="descricao">Descrição</option>
@@ -71,7 +87,7 @@ function ListarMateriais() {
           <option value="data_de_aquisicao">Data de Aquisição</option>
           <option value="estado_de_conservacao">Estado de Conservação</option>
           <option value="localizacao_fisica">Localização Física</option>
-          <option value="status_do_material">Localização Física</option>
+          <option value="status_do_material">Status do Material</option>
         </select>
         <input
           type="text"
@@ -80,32 +96,39 @@ function ListarMateriais() {
           onChange={(e) => setPalavraChave(e.target.value)}
         />
       </div>
-      <table className="tabela">
+      <table>
         <thead>
           <tr>
-            <th className="tabela">ID</th>
-            <th className="tabela">Descrição</th>
-            <th className="tabela">Número de Série</th>
-            <th className="tabela">Categorias</th>
-            <th className="tabela">Data de Aquisição</th>
-            <th className="tabela">Estado de Conservação</th>
-            <th className="tabela">Localização Física</th>
-            <th className="tabela">Status do Material</th>
-            <th className="tabela">Foto</th>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Número de Série</th>
+            <th>Categorias</th>
+            <th>Data de Aquisição</th>
+            <th>Estado de Conservação</th>
+            <th>Localização Física</th>
+            <th>Status do Material</th>
+            <th>Foto</th>
           </tr>
         </thead>
         <tbody>
           {materiaisFiltrados.map((material, index) => (
-            <tr className="tabela" key={index}>
-              <td className="margem">{material.id}</td>
-              <td className="margem">{material.descricao}</td>
-              <td className="margem">{material.numero_de_serie}</td>
-              <td className="margem">[]</td>
-              <td className="margem">{material.data_de_aquisicao}</td>
-              <td className="margem">{material.estado_de_conservacao}</td>
-              <td className="margem">{material.localizacao_fisica}</td>
-              <td className="margem">{material.status_do_material}</td>
-            <td>
+            <tr key={index}>
+              <td>{material.id}</td>
+              <td>{material.descricao}</td>
+              <td>{material.numero_de_serie}</td>
+              <td>
+                {material.categorias.map((categoria, idx) => (
+                  <span key={idx}>
+                    {categoria.categoria}
+                    {idx < material.categorias.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </td>
+              <td>{material.data_de_aquisicao}</td>
+              <td>{material.estado_de_conservacao}</td>
+              <td>{material.localizacao_fisica}</td>
+              <td>{material.status_do_material}</td>
+              <td>
                 {material.uri_da_foto_do_material ? (
                   <img
                     src={material.uri_da_foto_do_material}
@@ -117,7 +140,7 @@ function ListarMateriais() {
                 )}
               </td>
               <td>
-                <button className="linha" onClick={() => handleEdit(material.id)}>
+                <button onClick={() => handleEdit(material.id)}>
                   Solicitar emprestimo
                 </button>
               </td>
