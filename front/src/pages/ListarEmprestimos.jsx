@@ -48,8 +48,17 @@ function Emprestimos() {
     fetch("http://localhost:3333/emprestimos")
       .then((response) => response.json())
       .then((data) => {
-        setEmprestimos(data);
-        setEmprestimosFiltrados(data);
+        const emprestimosFormatados = data.map((emprestimo) => ({
+          ...emprestimo,
+          data_do_emprestimo: new Date(
+            emprestimo.data_do_emprestimo
+          ).toLocaleDateString("pt-BR"),
+          data_de_devolucao_prevista: new Date(
+            emprestimo.data_de_devolucao_prevista
+          ).toLocaleDateString("pt-BR"),
+        }));
+        setEmprestimos(emprestimosFormatados);
+        setEmprestimosFiltrados(emprestimosFormatados);
       })
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []);
