@@ -73,16 +73,20 @@ app.post("/livro", isAuthorized, async (req, res) => {
     uri_da_capa_do_livro,
     status_do_livro
   } = req.body;
-  const livro = await db.createLivro(
-    isbn,
-    titulo,
-    descricao,
-    data_de_aquisicao,
-    estado_de_conservacao,
-    localizacao_fisica,
-    uri_da_capa_do_livro,
-    status_do_livro
-  );
+  try {
+      const livro = await db.createLivro(
+        isbn,
+        titulo,
+        descricao,
+        data_de_aquisicao,
+        estado_de_conservacao,
+        localizacao_fisica,
+        uri_da_capa_do_livro,
+        status_do_livro
+      );
+  } catch (err) {
+    return res.status(400).send({error: err.sqlMessage});
+  }
   res.status(201).send({message: "Livro criado com sucesso."});
 });
 
@@ -338,10 +342,7 @@ app.post("/login", async (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-  res.cookie("userSave", "logout", {
-    expires: new Date(Date.now() + 2 * 1000),
-    httpOnly: true,
-  });
+  console.log("logout");
   res.status(200);
 });
 

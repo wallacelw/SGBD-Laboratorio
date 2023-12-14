@@ -36,7 +36,10 @@ const Login = () => {
   const handleClickLogout = async (e) => {
     e.preventDefault();
     try {
-      await axios.get("http://localhost:3333/logout");
+      localStorage.removeItem("authLevel")
+      localStorage.removeItem("authToken")
+      await axios.get("http://localhost:3333/logout")
+      toast("logout")
     } catch (error) {
       console.log(error);
     }

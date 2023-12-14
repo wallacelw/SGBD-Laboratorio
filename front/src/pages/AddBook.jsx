@@ -25,12 +25,13 @@ const AddBook = () => {
     const handleClick = async (e) => {
         e.preventDefault()
         try {
-            await axios.post("http://localhost:3333/livro", book , { headers: headers }, {headers: headers}).then(
+            await axios.post("http://localhost:3333/livro", book , { headers: headers }).then(
                 (res) => toast(res.data.message)
             )
             navigate("/Books");
         } catch (error) {
             console.log(error)
+            toast(error)
             setError(true)
         }
     }

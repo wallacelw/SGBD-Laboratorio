@@ -73,29 +73,33 @@ export async function createLivro(
   uri_da_capa_do_livro,
   status_do_livro
 ) {
-  const result = await pool.query(
-    `
-    INSERT INTO Livros (isbn,
-                        titulo,
-                        descricao,
-                        data_de_aquisicao,
-                        estado_de_conservacao,
-                        localizacao_fisica,
-                        uri_da_capa_do_livro,
-                        status_do_livro)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      isbn,
-      titulo,
-      descricao,
-      data_de_aquisicao,
-      estado_de_conservacao,
-      localizacao_fisica,
-      uri_da_capa_do_livro,
-      status_do_livro,
-    ]
-  );
+  try {
+    const result = await pool.query(
+      `
+      INSERT INTO Livros (isbn,
+                          titulo,
+                          descricao,
+                          data_de_aquisicao,
+                          estado_de_conservacao,
+                          localizacao_fisica,
+                          uri_da_capa_do_livro,
+                          status_do_livro)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        isbn,
+        titulo,
+        descricao,
+        data_de_aquisicao,
+        estado_de_conservacao,
+        localizacao_fisica,
+        uri_da_capa_do_livro,
+        status_do_livro,
+      ]
+    );
+  } catch (err) {
+    throw err
+  }
   return result;
 }
 
