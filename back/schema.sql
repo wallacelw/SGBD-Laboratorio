@@ -193,9 +193,9 @@ insert into Usuarios (
     uri_da_foto_do_usuario
 )
 values 
-(1, 'root', 'adm', 'administrador', 'admin', 'admin', 'secret'),
-(2, 'estudante1', 'x', 'membro', 'membro', 'membro', 'secret'),
-(3, 'estudante2', 'y', 'membro', 'membro', 'membro', 'secret')
+(1, 'root', 'adm', 'administrador', 'admin', '$2a$08$l2BRORSq5cx/01g0NjFZx.LYyRB46flS2uFZn13aFpHGTO4OVtqry', 'secret'),
+(2, 'estudante1', 'x', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'secret'),
+(3, 'estudante2', 'x', 'membro', 'membro', '$2a$08$pnSOxb/9St4Ip0NDeDt77uu/Ch0l/68fk6nDE.lBX8o/X6mvUH9tG', 'secret')
 ;
 
 insert into Emprestimos (
