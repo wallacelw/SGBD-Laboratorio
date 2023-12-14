@@ -85,7 +85,7 @@ const EditMaterial = () => {
       />
       <input
         className="box_input"
-        type="number"
+        type="text"
         placeholder="URI do Material"
         onChange={handleChange}
         name="uri_da_foto_do_material"
