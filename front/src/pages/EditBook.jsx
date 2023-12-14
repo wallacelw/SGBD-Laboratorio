@@ -15,6 +15,9 @@ const EditBook = () => {
     uri_da_capa_do_livro: null,
   });
 
+  const [categorias, setCategorias] = useState("");
+  const [autores, setAutores] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
   const bookIsbn = location.pathname.split("/")[3];
@@ -27,8 +30,13 @@ const EditBook = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
+      const dataToSend = {
+        ...book,
+        categorias: categorias.split(",").map((item) => item.trim()),
+        autores: autores.split(",").map((item) => item.trim()),
+      };
       await axios
-        .put(`http://localhost:3333/livro/${bookIsbn}`, book, {
+        .put(`http://localhost:3333/livro/${bookIsbn}`, dataToSend, {
           headers: headers,
         })
         .then((res) => toast(res.data.message));
@@ -84,6 +92,20 @@ const EditBook = () => {
         onChange={handleChange}
         name="uri_da_capa_do_livro"
       />
+      <input
+        className="box_input"
+        type="text"
+        placeholder="Categorias (separadas por vírgula)"
+        value={categorias}
+        onChange={(e) => setCategorias(e.target.value)}
+      />
+      <input
+        className="box_input"
+        type="text"
+        placeholder="Autores (separados por vírgula)"
+        value={autores}
+        onChange={(e) => setAutores(e.target.value)}
+      />
       <select
         className="box_input"
         name="status_do_livro"
@@ -93,7 +115,6 @@ const EditBook = () => {
         <option value="disponivel">Disponível</option>
         <option value="nao_disponivel">Não Disponível</option>
       </select>
-
       <button onClick={handleClick}> Editar </button>
       {error && "Algo deu errado!"}
       <Link className="hyperlink" to="/Books">
